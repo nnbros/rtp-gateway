@@ -42,7 +42,7 @@ jobs:
     - name: Extract version from pom.xml
       id: extract_version
       run: |
-        VERSION=$(xmlstarlet sel -t -v "/project/version" -n pom.xml)
+        VERSION=$(xmlstarlet sel -N p="http://maven.apache.org/POM/4.0.0" -t -v "/p:project/p:version" -n pom.xml)
         echo "VERSION=$VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_ENV
     - name: Log in to the Container registry
