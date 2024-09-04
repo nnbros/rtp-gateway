@@ -57,5 +57,5 @@ jobs:
         context: .
         push: true
         tags: |
-          ${{ REGISTRY }}/${{ IMAGE_NAME }}:${{ VERSION }}
-          ${{ REGISTRY }}/${{ IMAGE_NAME }}:latest
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
