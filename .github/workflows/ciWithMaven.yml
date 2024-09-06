@@ -57,8 +57,9 @@ jobs:
       with:
         context: .
         push: true
-        build-args: "BOT_TOKEN=${{ secrets.RTP_BOT_TOKEN }}"
-        secrets: "BOT_KEY=${{ secrets.RTP_BOT_PRIVATE_KEY }}"
+        build-args: | 
+          "BOT_TOKEN=${{ secrets.RTP_BOT_TOKEN }}"
+          "BOT_KEY=${{ secrets.RTP_BOT_PRIVATE_KEY }}"
         tags: |
           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
