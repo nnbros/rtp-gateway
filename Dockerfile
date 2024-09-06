@@ -1,6 +1,9 @@
 FROM openjdk:17-alpine
+ARG BOT_TOKEN
+ENV RTP_BOT_TOKEN=${BOT_TOKEN}
 COPY ./target/*.jar /app/rtp-gateway.jar
 RUN chmod 777 /app/rtp-gateway.jar
-RUN ls -al /app
-RUN ls -al
+RUN mkdir /app/certificates
+RUN --mount=type=secret,id=BOT_KEY \
+    cat /run/secrets/BOT_KEY > /app/certificates/rtpbot.key
 ENTRYPOINT ["java", "-jar", "/app/rtp-gateway.jar"]
