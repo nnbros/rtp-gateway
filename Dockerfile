@@ -6,6 +6,4 @@ RUN chmod 777 /app/rtp-gateway.jar
 RUN mkdir /app/certificates
 RUN --mount=type=secret,id=BOT_KEY \
     cat /run/secrets/BOT_KEY > /app/certificates/rtpbot.key
-RUN ls /app/certificates
-RUN cat /app/certificates/rtpbot.key
 ENTRYPOINT ["java", "-jar", "/app/rtp-gateway.jar"]
