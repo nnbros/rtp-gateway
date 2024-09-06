@@ -42,7 +42,8 @@ jobs:
     - name: Extract version from pom.xml
       id: extract_version
       run: |
-        VERSION=$(xmlstarlet sel -t -v "/project/version" -n pom.xml)
+        VERSION=$(xmlstarlet sel -N p="http://maven.apache.org/POM/4.0.0" -t -v "/p:project/p:version" -n pom.xml)
+        echo "VERSION=$VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_ENV
     - name: Log in to the Container registry
       uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
@@ -57,5 +58,5 @@ jobs:
         context: .
         push: true
         tags: |
-          ${{ REGISTRY }}/${{ IMAGE_NAME }}:${{ VERSION }}
-          ${{ REGISTRY }}/${{ IMAGE_NAME }}:latest
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
