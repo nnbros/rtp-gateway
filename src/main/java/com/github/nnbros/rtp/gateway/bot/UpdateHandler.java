@@ -32,16 +32,16 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 
 			UpdateType updateType = UpdateType.getUpdateType(update);
 			log.debug("Update type is [{}]", updateType);
-			String chatId = getUserId(update, updateType);
-			MDC.put(CHAT_ID_MDC_KEY, "[%s]".formatted(chatId));
-			MDC.put(UPDATE_ID_MDC_KEY, updateId.toString());
+			String userId = getUserId(update, updateType);
+			MDC.put(CHAT_ID_MDC_KEY, "[%s]".formatted(userId));
+			MDC.put(UPDATE_ID_MDC_KEY, "[%d]".formatted(updateId));
 
 			BotApiMethod<?> response;
 			if (updateType == UpdateType.COMMAND) {
 				response = commandService.processUpdate(update);
 			} else {
 				log.info("The update type is unknown and it will not be processed");
-				response = messageBuilder.createMessage(chatId, UNKNOWN_UPDATE_RESPONSE_MESSAGE);
+				response = messageBuilder.createMessage(userId, UNKNOWN_UPDATE_RESPONSE_MESSAGE);
 			}
 
 			log.debug("Response type for the update: {}", response.getMethod());

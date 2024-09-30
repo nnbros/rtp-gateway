@@ -15,7 +15,7 @@ public class BotUtils {
 		} else if (updateType == EDITED_MESSAGE) {
 			return getUserId(update.getEditedMessage());
 		} else {
-			throw new GatewayRuntimeException("Unable to get chat id from update %s".formatted(update.getUpdateId()));
+			throw new GatewayRuntimeException("Unable to get the user id from update %s".formatted(update.getUpdateId()));
 		}
 	}
 
