@@ -24,6 +24,7 @@ public class UpdateTypeTest {
 	private static Stream<Arguments> provideUpdates() {
 		return Stream.of(
 				Arguments.of(createTestCommandUpdate(Command.HELP), COMMAND),
+				Arguments.of(createTestEditedCommandUpdate(Command.HELP), COMMAND),
 				Arguments.of(createTestMessageUpdate(), MESSAGE),
 				Arguments.of(createTestEditedMessageUpdate(), EDITED_MESSAGE),
 				Arguments.of(createTestEmptyUpdate(), UNKNOWN)

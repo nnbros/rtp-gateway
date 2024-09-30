@@ -12,13 +12,14 @@ public enum UpdateType {
 		if (update.hasMessage()) {
 			if (update.getMessage().isCommand()) {
 				return COMMAND;
-			} else {
-				return MESSAGE;
 			}
+			return MESSAGE;
 		} else if (update.hasEditedMessage()) {
+			if (update.getEditedMessage().isCommand()) {
+				return COMMAND;
+			}
 			return EDITED_MESSAGE;
-		} else {
-			return UNKNOWN;
 		}
+		return UNKNOWN;
 	}
 }

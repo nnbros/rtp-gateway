@@ -78,4 +78,10 @@ public class BotTestUtils {
 		update.setMessage(createTestCommandMessage("/" + command.name().toLowerCase()));
 		return update;
 	}
+
+	public static Update createTestEditedCommandUpdate(Command command) {
+		Update update = createTestEditedMessageUpdate();
+		update.setMessage(createTestCommandMessage("/" + command.name().toLowerCase()));
+		return update;
+	}
 }
