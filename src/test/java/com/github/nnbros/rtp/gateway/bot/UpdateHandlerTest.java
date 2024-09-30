@@ -2,12 +2,16 @@ package com.github.nnbros.rtp.gateway.bot;
 
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.createTestCommandUpdate;
-import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.createTestMessageUpdate;
+import java.util.stream.Stream;
+
+import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.*;
 import static com.github.nnbros.rtp.gateway.bot.UpdateHandler.UNKNOWN_UPDATE_RESPONSE_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -17,9 +21,9 @@ public class UpdateHandlerTest {
 	private final CommandService commandService = mock(CommandService.class);
 	private final UpdateHandler updateHandler = new UpdateHandler(commandService, messageBuilder);
 
-	@Test
-	public void handleCommandUpdate() {
-		Update testUpdate = createTestCommandUpdate(Command.START);
+	@ParameterizedTest
+	@MethodSource("commandProvider")
+	public void handleCommandUpdate(Update testUpdate) {
 		BotApiMethod<?> testResponse = SendMessage.builder()
 				.text("Test handleCommandUpdate")
 				.chatId(testUpdate.getMessage().getChatId())
@@ -51,5 +55,12 @@ public class UpdateHandlerTest {
 
 		GatewayRuntimeException exception = assertThrows(GatewayRuntimeException.class, () -> updateHandler.apply(testUpdate));
 		assertEquals(testException, exception.getCause());
+	}
+
+	static Stream<Arguments> commandProvider() {
+		return Stream.of(
+				Arguments.of(createTestCommandUpdate(Command.START)),
+				Arguments.of(createTestEditedCommandUpdate(Command.START))
+		);
 	}
 }
