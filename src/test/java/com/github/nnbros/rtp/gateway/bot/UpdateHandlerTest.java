@@ -26,7 +26,7 @@ public class UpdateHandlerTest {
 	public void handleCommandUpdate(Update testUpdate) {
 		BotApiMethod<?> testResponse = SendMessage.builder()
 				.text("Test handleCommandUpdate")
-				.chatId(testUpdate.getMessage().getChatId())
+				.chatId(testUpdate.hasMessage() ? testUpdate.getMessage().getChatId() : testUpdate.getEditedMessage().getChatId())
 				.build();
 		doReturn(testResponse).when(commandService).processUpdate(testUpdate);
 

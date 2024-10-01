@@ -37,7 +37,7 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 			MDC.put(UPDATE_ID_MDC_KEY, "[%d]".formatted(updateId));
 
 			BotApiMethod<?> response;
-			if (updateType == UpdateType.COMMAND) {
+			if (updateType == UpdateType.COMMAND || updateType == UpdateType.EDITED_COMMAND) {
 				response = commandService.processUpdate(update);
 			} else {
 				log.info("The update type is unknown and it will not be processed");

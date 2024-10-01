@@ -31,6 +31,18 @@ class CommandServiceImplTest {
 		assertEquals(expectedResponse, ((SendMessage) response).getText());
 	}
 
+	@ParameterizedTest
+	@MethodSource("provideCommands")
+	void processEditedCommand(Command command, String expectedResponse) {
+		Message message = createTestCommandMessage("/" + command.name().toLowerCase());
+		Update update = createTestEditedMessageUpdate(message);
+
+		BotApiMethod<?> response = commandService.processUpdate(update);
+
+		assertInstanceOf(SendMessage.class, response);
+		assertEquals(expectedResponse, ((SendMessage) response).getText());
+	}
+
 	@Test
 	void processUpdateIsNotCommand() {
 		Message message = createTestMessage();

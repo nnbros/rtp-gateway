@@ -22,11 +22,12 @@ class BotUtilsTest {
 		assertEquals(String.valueOf(TEST_CHAT_ID), userId);
 	}
 
-	@Test
-	void getUserIdForEditedMessage() {
+	@ParameterizedTest
+	@EnumSource(value = UpdateType.class, names = {"EDITED_MESSAGE", "EDITED_COMMAND"})
+	void getUserIdForEditedMessage(UpdateType updateType) {
 		Update update = createTestEditedMessageUpdate();
 
-		String userId = BotUtils.getUserId(update, UpdateType.EDITED_MESSAGE);
+		String userId = BotUtils.getUserId(update, updateType);
 
 		assertEquals(String.valueOf(TEST_CHAT_ID), userId);
 	}

@@ -4,6 +4,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public enum UpdateType {
 	COMMAND,
+	EDITED_COMMAND,
 	MESSAGE,
 	EDITED_MESSAGE,
 	UNKNOWN;
@@ -16,7 +17,7 @@ public enum UpdateType {
 			return MESSAGE;
 		} else if (update.hasEditedMessage()) {
 			if (update.getEditedMessage().isCommand()) {
-				return COMMAND;
+				return EDITED_COMMAND;
 			}
 			return EDITED_MESSAGE;
 		}

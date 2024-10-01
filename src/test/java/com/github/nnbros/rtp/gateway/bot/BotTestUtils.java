@@ -67,21 +67,23 @@ public class BotTestUtils {
 	}
 
 	public static Update createTestEditedMessageUpdate() {
+		return createTestEditedMessageUpdate(createTestMessage());
+	}
+
+	public static Update createTestEditedMessageUpdate(Message message) {
 		Update update = new Update();
-		update.setEditedMessage(createTestMessage());
+		update.setEditedMessage(message);
 		update.setUpdateId(TEST_UPDATE_ID);
 		return update;
 	}
 
 	public static Update createTestCommandUpdate(Command command) {
-		Update update = createTestMessageUpdate();
-		update.setMessage(createTestCommandMessage("/" + command.name().toLowerCase()));
-		return update;
+		Message message = createTestCommandMessage("/" + command.name().toLowerCase());
+		return createTestMessageUpdate(message);
 	}
 
 	public static Update createTestEditedCommandUpdate(Command command) {
-		Update update = createTestEditedMessageUpdate();
-		update.setMessage(createTestCommandMessage("/" + command.name().toLowerCase()));
-		return update;
+		Message message = createTestCommandMessage("/" + command.name().toLowerCase());
+		return createTestEditedMessageUpdate(message);
 	}
 }

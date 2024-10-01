@@ -20,7 +20,7 @@ public class CommandServiceImpl implements CommandService {
 
 	@Override
 	public BotApiMethod<?> processUpdate(Update update) {
-		Message message = update.getMessage();
+		Message message = update.hasMessage() ? update.getMessage() : update.getEditedMessage();
 		Objects.requireNonNull(message, "Message cannot be empty");
 		if (!message.isCommand()) {
 			throw new GatewayRuntimeException("Unable to process the update %s. It's not a command".formatted(update.getUpdateId()));
