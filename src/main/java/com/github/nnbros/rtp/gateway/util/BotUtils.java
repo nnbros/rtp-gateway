@@ -12,7 +12,7 @@ public class BotUtils {
 	public static String getUserId(Update update, UpdateType updateType) {
 		if (updateType == MESSAGE || updateType == COMMAND) {
 			return getUserId(update.getMessage());
-		} else if (updateType == EDITED_MESSAGE) {
+		} else if (updateType == EDITED_MESSAGE || updateType == EDITED_COMMAND) {
 			return getUserId(update.getEditedMessage());
 		} else {
 			throw new GatewayRuntimeException("Unable to get the user id from update %s".formatted(update.getUpdateId()));
