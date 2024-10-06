@@ -9,6 +9,8 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.*;
@@ -18,8 +20,11 @@ import static org.mockito.Mockito.*;
 
 public class UpdateHandlerTest {
 	private final MessageBuilder messageBuilder = new MessageBuilderImpl();
+
 	private final CommandService commandService = mock(CommandService.class);
-	private final UpdateHandler updateHandler = new UpdateHandler(commandService, messageBuilder);
+	private final EnumMap<UpdateType, UpdateService> updateServiceMap = new EnumMap<>(
+			Map.of(UpdateType.COMMAND, commandService, UpdateType.EDITED_COMMAND, commandService));
+	private final UpdateHandler updateHandler = new UpdateHandler(updateServiceMap, messageBuilder);
 
 	@ParameterizedTest
 	@MethodSource("commandProvider")
@@ -28,11 +33,11 @@ public class UpdateHandlerTest {
 				.text("Test handleCommandUpdate")
 				.chatId(testUpdate.hasMessage() ? testUpdate.getMessage().getChatId() : testUpdate.getEditedMessage().getChatId())
 				.build();
-		doReturn(testResponse).when(commandService).processUpdate(testUpdate);
+		doReturn(testResponse).when(commandService).process(TEST_USER_ID, testUpdate);
 
 		BotApiMethod<?> response = updateHandler.apply(testUpdate);
 
-		verify(commandService, times(1)).processUpdate(testUpdate);
+		verify(commandService, times(1)).process(TEST_USER_ID, testUpdate);
 		assertEquals(testResponse, response);
 	}
 
@@ -51,7 +56,8 @@ public class UpdateHandlerTest {
 	public void handleException() {
 		Update testUpdate = createTestCommandUpdate(Command.START);
 		RuntimeException testException = new RuntimeException("Test exception message");
-		doThrow(testException).when(commandService).processUpdate(testUpdate);
+
+		doThrow(testException).when(commandService).process(TEST_USER_ID, testUpdate);
 
 		GatewayRuntimeException exception = assertThrows(GatewayRuntimeException.class, () -> updateHandler.apply(testUpdate));
 		assertEquals(testException, exception.getCause());

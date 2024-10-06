@@ -9,7 +9,7 @@ import static com.github.nnbros.rtp.gateway.bot.UpdateType.*;
 
 public class BotUtils {
 
-	public static String getUserId(Update update, UpdateType updateType) {
+	public static Long getUserId(Update update, UpdateType updateType) {
 		if (updateType == MESSAGE || updateType == COMMAND) {
 			return getUserId(update.getMessage());
 		} else if (updateType == EDITED_MESSAGE || updateType == EDITED_COMMAND) {
@@ -19,9 +19,8 @@ public class BotUtils {
 		}
 	}
 
-	private static String getUserId(Message message) {
+	private static Long getUserId(Message message) {
 		return message.getFrom()
-				.getId()
-				.toString();
+				.getId();
 	}
 }

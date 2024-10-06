@@ -11,7 +11,7 @@ import java.util.List;
 public class BotTestUtils {
 	public static final int TEST_UPDATE_ID = 456;
 	public static final String TEST_TEXT = "util";
-	public static final long TEST_CHAT_ID = 123L;
+	public static final long TEST_USER_ID = 123L;
 	public static final String CHAT_PRIVATE_TYPE = "private";
 	public static final String COMMAND_MESSAGE_TYPE = "bot_command";
 
@@ -22,10 +22,10 @@ public class BotTestUtils {
 	public static Message createTestMessage(String text) {
 		Chat chat = Chat.builder()
 				.type(CHAT_PRIVATE_TYPE)
-				.id(TEST_CHAT_ID)
+				.id(TEST_USER_ID)
 				.build();
 		User from = User.builder()
-				.id(TEST_CHAT_ID)
+				.id(TEST_USER_ID)
 				.firstName("TestUser")
 				.isBot(false)
 				.build();

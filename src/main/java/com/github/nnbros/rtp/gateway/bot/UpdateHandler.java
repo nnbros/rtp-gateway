@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.EnumMap;
 import java.util.function.Function;
 
 import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
@@ -20,7 +21,8 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 	private static final String UPDATE_ID_MDC_KEY = "updateId";
 	public static final String UNKNOWN_UPDATE_RESPONSE_MESSAGE = "Sorry, there is no functionality implemented to process your request.";
 
-	private final CommandService commandService;
+	private final EnumMap<UpdateType, UpdateService> updateServiceMap;
+
 	private final MessageBuilder messageBuilder;
 
 	@Override
@@ -32,17 +34,16 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 
 			UpdateType updateType = UpdateType.getUpdateType(update);
 			log.debug("Update type is [{}]", updateType);
-			String userId = getUserId(update, updateType);
+			Long userId = getUserId(update, updateType);
 			MDC.put(CHAT_ID_MDC_KEY, "[%s]".formatted(userId));
 			MDC.put(UPDATE_ID_MDC_KEY, "[%d]".formatted(updateId));
 
-			BotApiMethod<?> response;
-			if (updateType == UpdateType.COMMAND || updateType == UpdateType.EDITED_COMMAND) {
-				response = commandService.processUpdate(update);
-			} else {
+			UpdateService updateService = updateServiceMap.getOrDefault(updateType, (id, updt) -> {
 				log.info("The update type is unknown and it will not be processed");
-				response = messageBuilder.createMessage(userId, UNKNOWN_UPDATE_RESPONSE_MESSAGE);
-			}
+				return messageBuilder.createMessage(id, UNKNOWN_UPDATE_RESPONSE_MESSAGE);
+			});
+
+			BotApiMethod<?> response = updateService.process(userId, update);
 
 			log.debug("Response type for the update: {}", response.getMethod());
 			log.info("The update has been processed successfully");

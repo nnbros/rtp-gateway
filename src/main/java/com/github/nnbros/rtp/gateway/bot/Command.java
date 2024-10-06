@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 @Getter
 @RequiredArgsConstructor
 public enum Command {
-	START("Добро пожаловать в тестовую версию бота Rise to power!"),
+	START("Вы уже зарегистрированы."),
 	HELP("Здесь когда-нибудь будет справка по боту."),
 	UNKNOWN("Не знаю такой команды :(");
 

@@ -1,0 +1,13 @@
+actions:
+    mapping:
+        storyteller_create_char_gender: STORYTELLER
+        storyteller_create_char_name: STORYTELLER
+        storyteller_create_char_class_selection: STORYTELLER
+        storyteller_create_char_class_confirmation: STORYTELLER
+        storyteller_create_char_registration: STORYTELLER
+    allowed_for_unregistered_users:
+    - storyteller_create_char_gender
+    - storyteller_create_char_name
+    - storyteller_create_char_class_selection
+    - storyteller_create_char_class_confirmation
+    - storyteller_create_char_registration
