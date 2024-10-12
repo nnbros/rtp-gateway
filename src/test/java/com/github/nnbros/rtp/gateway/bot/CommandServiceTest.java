@@ -1,7 +1,8 @@
 package com.github.nnbros.rtp.gateway.bot;
 
+import com.github.nnbros.rtp.gateway.bot.update.CommandService;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
-import com.github.nnbros.rtp.gateway.service.RegistrationService;
+import com.github.nnbros.rtp.gateway.bot.registration.RegistrationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,7 +19,7 @@ import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class CommandServiceImplTest {
+class CommandServiceTest {
 	private final MessageBuilder messageBuilder = new MessageBuilderImpl();
 	private final RegistrationService registrationService = mock(RegistrationService.class);
 	private final CommandService commandService = new CommandService(registrationService, messageBuilder);

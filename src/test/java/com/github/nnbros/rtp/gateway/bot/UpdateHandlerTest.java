@@ -1,5 +1,9 @@
 package com.github.nnbros.rtp.gateway.bot;
 
+import com.github.nnbros.rtp.gateway.bot.update.CommandService;
+import com.github.nnbros.rtp.gateway.bot.update.LockService;
+import com.github.nnbros.rtp.gateway.bot.update.UpdateService;
+import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,11 +24,12 @@ import static org.mockito.Mockito.*;
 
 public class UpdateHandlerTest {
 	private final MessageBuilder messageBuilder = new MessageBuilderImpl();
+	private final LockService lockService = new LockService();
 
 	private final CommandService commandService = mock(CommandService.class);
 	private final EnumMap<UpdateType, UpdateService> updateServiceMap = new EnumMap<>(
 			Map.of(UpdateType.COMMAND, commandService, UpdateType.EDITED_COMMAND, commandService));
-	private final UpdateHandler updateHandler = new UpdateHandler(updateServiceMap, messageBuilder);
+	private final UpdateHandler updateHandler = new UpdateHandler(updateServiceMap, lockService, messageBuilder);
 
 	@ParameterizedTest
 	@MethodSource("commandProvider")

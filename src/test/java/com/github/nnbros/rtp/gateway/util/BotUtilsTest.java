@@ -1,6 +1,6 @@
 package com.github.nnbros.rtp.gateway.util;
 
-import com.github.nnbros.rtp.gateway.bot.UpdateType;
+import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

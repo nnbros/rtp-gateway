@@ -1,7 +1,9 @@
-package com.github.nnbros.rtp.gateway.bot;
+package com.github.nnbros.rtp.gateway.bot.update;
 
+import com.github.nnbros.rtp.gateway.bot.Command;
+import com.github.nnbros.rtp.gateway.bot.MessageBuilder;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
-import com.github.nnbros.rtp.gateway.service.RegistrationService;
+import com.github.nnbros.rtp.gateway.bot.registration.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

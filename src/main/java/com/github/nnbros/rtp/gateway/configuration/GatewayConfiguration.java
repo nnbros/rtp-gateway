@@ -1,19 +1,21 @@
 package com.github.nnbros.rtp.gateway.configuration;
 
-import com.github.nnbros.rtp.gateway.bot.CommandService;
-import com.github.nnbros.rtp.gateway.bot.UpdateService;
-import com.github.nnbros.rtp.gateway.bot.UpdateType;
-import com.github.nnbros.rtp.gateway.service.ActionService;
-import com.github.nnbros.rtp.gateway.service.MessageService;
+import com.github.nnbros.rtp.gateway.bot.update.CommandService;
+import com.github.nnbros.rtp.gateway.bot.update.UpdateService;
+import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
+import com.github.nnbros.rtp.gateway.bot.update.ActionService;
+import com.github.nnbros.rtp.gateway.bot.update.MessageService;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.EnumMap;
 
-import static com.github.nnbros.rtp.gateway.bot.UpdateType.*;
+import static com.github.nnbros.rtp.gateway.bot.update.UpdateType.*;
 
 @Configuration
+@EnableScheduling
 @EnableConfigurationProperties({GatewayProperties.class, Actions.class})
 public class GatewayConfiguration {
 	@Bean
