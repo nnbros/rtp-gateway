@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserManagementController {
 	private final LockService lockService;
 
 	@DeleteMapping("/{userId}/lock")
-	public void releaseLock(@PathVariable("id") Long userId) {
+	public void releaseLock(@PathVariable Long userId) {
 		lockService.releaseLock(userId);
 	}
 }
