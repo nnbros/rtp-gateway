@@ -6,4 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public interface UpdateService {
 
 	BotApiMethod<?> process(Long userId, Update update);
+
+	String retrieveActionData(Update update);
+
+	String getUsername(Update update);
 }

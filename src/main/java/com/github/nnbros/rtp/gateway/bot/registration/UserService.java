@@ -65,7 +65,7 @@ public class UserService {
 		User user = new User();
 		user.setId(userId);
 		user.setUsername(username);
-		String lastAction = unregisteredUsers.get(user.getId()).getLastAction();
+		String lastAction = getLastAction(user.getId());
 		user.setLastAction(lastAction);
 		repository.save(user);
 		// after save user is considered to be registered, so remove the user from the unregistered users map

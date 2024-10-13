@@ -1,9 +1,6 @@
 package com.github.nnbros.rtp.gateway.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +12,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "users", schema = "gateway")
+@Table(name = "user", schema = "gateway")
 @NoArgsConstructor
 public class User {
 	@Id
@@ -25,19 +22,20 @@ public class User {
 	@Column(name = "username")
 	private String username;
 
-	@Column(name = "status")
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status", insertable = false)
 	private Status status;
 
-	@Column(name = "created_at")
+	@Column(name = "created_at", insertable = false, updatable = false)
 	private LocalDateTime created;
 
-	@Column(name = "updated_at")
+	@Column(name = "updated_at", insertable = false, updatable = false)
 	private LocalDateTime updated;
 
 	@Column(name = "last_action")
 	private String lastAction;
 
-	@Column(name = "last_action_timestamp")
+	@Column(name = "last_action_timestamp", insertable = false)
 	private LocalDateTime lastActionTime;
 
 	@Override

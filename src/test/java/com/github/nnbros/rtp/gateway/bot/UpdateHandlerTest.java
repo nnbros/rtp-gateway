@@ -1,5 +1,7 @@
 package com.github.nnbros.rtp.gateway.bot;
 
+import com.github.nnbros.rtp.gateway.bot.registration.RegistrationService;
+import com.github.nnbros.rtp.gateway.bot.registration.UserService;
 import com.github.nnbros.rtp.gateway.bot.update.CommandService;
 import com.github.nnbros.rtp.gateway.bot.update.LockService;
 import com.github.nnbros.rtp.gateway.bot.update.UpdateService;
@@ -27,9 +29,11 @@ public class UpdateHandlerTest {
 	private final LockService lockService = new LockService();
 
 	private final CommandService commandService = mock(CommandService.class);
+	private final UserService userService = mock(UserService.class);
+	private final RegistrationService registrationService = mock(RegistrationService.class);
 	private final EnumMap<UpdateType, UpdateService> updateServiceMap = new EnumMap<>(
 			Map.of(UpdateType.COMMAND, commandService, UpdateType.EDITED_COMMAND, commandService));
-	private final UpdateHandler updateHandler = new UpdateHandler(updateServiceMap, lockService, messageBuilder);
+	private final UpdateHandler updateHandler = new UpdateHandler(updateServiceMap, lockService, userService, registrationService, messageBuilder);
 
 	@ParameterizedTest
 	@MethodSource("commandProvider")
