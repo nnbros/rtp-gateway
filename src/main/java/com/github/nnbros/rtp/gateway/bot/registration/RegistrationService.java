@@ -40,9 +40,10 @@ public class RegistrationService {
 	public SendMessage register(Long userId, Update update, String actionData, String username) {
 		if (Set.of(UpdateType.COMMAND, UpdateType.EDITED_COMMAND).contains(UpdateType.getUpdateType(update))) { //it's a command
 			updateAndSendAction(userId, STORYTELLER_CREATE_CHAR_START, null, update);
-		} else if (actionData == null) { // it's a message
-			if (Set.of(STORYTELLER_CREATE_CHAR_GENDER, STORYTELLER_CREATE_CHAR_NAME)
-					.contains(userService.getLastAction(userId))) {
+		} else if (actionData == null) { // it's a message, so get last action
+			if (userService.getLastAction(userId)
+					.filter(action -> Set.of(STORYTELLER_CREATE_CHAR_GENDER, STORYTELLER_CREATE_CHAR_NAME).contains(action))
+					.isPresent()) {
 				updateAndSendAction(userId, STORYTELLER_CREATE_CHAR_NAME, null, update);
 			}
 		} else {

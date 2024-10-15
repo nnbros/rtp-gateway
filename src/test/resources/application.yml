@@ -1,0 +1,32 @@
+gateway:
+    rtp-bot:
+        url: https://test.com:1234
+        ip: 127.0.0.1
+        webhook-path: testPath
+        token: testToken
+    certificate-name: test.crt
+    certificate-path: /certificates/${gateway.certificate-name}
+    user:
+        lock:
+            ttl: PT1M
+        unregistered:
+            ttl: PT24H
+
+spring:
+    datasource:
+        url: jdbc:postgresql://127.0.0.1:5432/gateway
+        username: postgres
+        password: postgres
+    jpa:
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+    liquibase:
+        enabled: false
+    cloud:
+        openfeign:
+            client:
+                config:
+                    storyteller:
+                        url: http://127.0.0.1
+                        path: /api/v1/

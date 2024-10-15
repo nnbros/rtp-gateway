@@ -31,20 +31,20 @@ public class UserServiceTest {
 		user.setLastAction(ACTION);
 		Mockito.when(repository.findById(TEST_USER_ID)).thenReturn(Optional.of(user));
 		userService.updateLastAction(TEST_USER_ID, ACTION);
-		Assertions.assertEquals(userService.getLastAction(TEST_USER_ID), ACTION);
+		Assertions.assertEquals(userService.getLastAction(TEST_USER_ID), Optional.of(ACTION));
 	}
 
 	@Test
 	void checkUpdateLastAction() {
 		userService.updateLastAction(TEST_USER_ID, ACTION);
-		Assertions.assertEquals(userService.getLastAction(TEST_USER_ID), ACTION);
+		Assertions.assertEquals(userService.getLastAction(TEST_USER_ID), Optional.of(ACTION));
 	}
 
 	@Test
 	void checkLastActionUpdatedTwice() {
 		userService.updateLastAction(TEST_USER_ID, "old action");
 		userService.updateLastAction(TEST_USER_ID, ACTION);
-		Assertions.assertEquals(userService.getLastAction(TEST_USER_ID), ACTION);
+		Assertions.assertEquals(userService.getLastAction(TEST_USER_ID), Optional.of(ACTION));
 	}
 
 	@Test

@@ -1,0 +1,28 @@
+debug: true
+
+logging:
+    level:
+        root: INFO
+        web: DEBUG
+        org:
+            springframework:
+                boot:
+                    autoconfigure: ERROR
+        com:
+            github:
+                nnbros:
+                    rtp: DEBUG
+    file:
+        path: ""
+        name: ""
+
+spring:
+    datasource:
+        url: jdbc:postgresql://93.120.241.248:8543/rtp
+
+    cloud:
+        openfeign:
+            client:
+                config:
+                    storyteller:
+                        url: http://192.168.0.104:8085

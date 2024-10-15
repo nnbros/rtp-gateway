@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,13 +26,12 @@ public class UserService {
 		return repository.existsById(userId);
 	}
 
-	public String getLastAction(Long userId) {
+	public Optional<String> getLastAction(Long userId) {
 		if (unregisteredUsers.containsKey(userId)) {
-			return unregisteredUsers.get(userId).getLastAction();
+			return Optional.ofNullable(unregisteredUsers.get(userId).getLastAction());
 		} else {
 			return repository.findById(userId)
-					.map(User::getLastAction)
-					.orElse(null);
+					.map(User::getLastAction);
 		}
 	}
 
@@ -65,7 +65,7 @@ public class UserService {
 		User user = new User();
 		user.setId(userId);
 		user.setUsername(username);
-		String lastAction = getLastAction(user.getId());
+		String lastAction = getLastAction(user.getId()).orElse("no action");
 		user.setLastAction(lastAction);
 		repository.save(user);
 		// after save user is considered to be registered, so remove the user from the unregistered users map
