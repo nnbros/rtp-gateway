@@ -9,7 +9,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Builder
-public class Context {
+public class UnregisteredUserContext {
 	private String lastAction;
 	private Instant createTime;
 }

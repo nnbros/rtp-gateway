@@ -22,9 +22,30 @@ public class BotUtils {
 		}
 	}
 
+	public static String getUsername(Update update, UpdateType updateType) {
+		if (updateType == MESSAGE || updateType == COMMAND) {
+			return getUsername(update.getMessage());
+		} else if (updateType == EDITED_MESSAGE || updateType == EDITED_COMMAND) {
+			return getUsername(update.getEditedMessage());
+		} else if (updateType == CALLBACK_QUERY) {
+			return getUsername(update.getCallbackQuery());
+		} else {
+			throw new GatewayRuntimeException("Unable to get the username from update %s".formatted(update.getUpdateId()));
+		}
+	}
+
 	private static Long getUserId(Message message) {
 		return message.getFrom()
 				.getId();
+	}
+	private static String getUsername(Message message) {
+		return message.getFrom()
+				.getUserName();
+	}
+
+	private static String getUsername(CallbackQuery callbackQuery) {
+		return callbackQuery.getFrom()
+				.getUserName();
 	}
 
 	private static Long getUserId(CallbackQuery callbackQuery) {

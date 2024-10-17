@@ -1,0 +1,34 @@
+package com.github.nnbros.rtp.gateway.bot.update.processor;
+
+import com.github.nnbros.rtp.gateway.bot.registration.UserService;
+import com.github.nnbros.rtp.gateway.bot.update.Action;
+import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
+import com.github.nnbros.rtp.gateway.model.ActionProcessorType;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.Update;
+
+import static com.github.nnbros.rtp.gateway.util.BotUtils.getUsername;
+
+@Component
+@RequiredArgsConstructor
+public class RegisterUserActionProcessor implements ActionProcessor {
+	private final UserService userService;
+
+	@Override
+	public void process(Action action) {
+		Update update = action.update();
+		String username = getUsername(update, UpdateType.getUpdateType(update));
+		userService.create(action.userId(), username);
+	}
+
+	@Override
+	public ActionProcessorType getType() {
+		return ActionProcessorType.REGISTRAR;
+	}
+
+	@Override
+	public int getOrder() {
+		return 4;
+	}
+}

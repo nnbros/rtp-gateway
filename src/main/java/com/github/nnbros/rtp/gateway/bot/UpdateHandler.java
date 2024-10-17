@@ -1,10 +1,7 @@
 package com.github.nnbros.rtp.gateway.bot;
 
-import com.github.nnbros.rtp.gateway.bot.registration.RegistrationService;
-import com.github.nnbros.rtp.gateway.bot.registration.UserService;
-import com.github.nnbros.rtp.gateway.bot.update.LockService;
-import com.github.nnbros.rtp.gateway.bot.update.UpdateService;
-import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
+import com.github.nnbros.rtp.gateway.bot.update.*;
+import com.github.nnbros.rtp.gateway.bot.update.provider.ActionProvider;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +13,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.EnumMap;
 import java.util.function.Function;
 
-import static com.github.nnbros.rtp.gateway.bot.Command.START;
 import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
 
 @Slf4j
@@ -24,10 +20,9 @@ import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
 @RequiredArgsConstructor
 public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 
-	private final EnumMap<UpdateType, UpdateService> updateServiceMap;
+	private final ActionRouter actionRouter;
+	private final EnumMap<UpdateType, ActionProvider> actionProviders;
 	private final LockService lockService;
-	private final UserService userService;
-	private final RegistrationService registrationService;
 	private final MessageBuilder messageBuilder;
 	private static final String CHAT_ID_MDC_KEY = "chatId";
 	private static final String UPDATE_ID_MDC_KEY = "updateId";
@@ -47,9 +42,9 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 			MDC.put(CHAT_ID_MDC_KEY, "[%s]".formatted(userId));
 			MDC.put(UPDATE_ID_MDC_KEY, "[%d]".formatted(updateId));
 
-			UpdateService updateService;
-			if (updateServiceMap.containsKey(updateType)) {
-				updateService = updateServiceMap.get(updateType);
+			ActionProvider actionProvider;
+			if (actionProviders.containsKey(updateType)) {
+				actionProvider = actionProviders.get(updateType);
 			} else {
 				log.info("The update type is unknown and it will not be processed");
 				return messageBuilder.createMessage(userId, UNKNOWN_UPDATE_RESPONSE_MESSAGE);
@@ -58,29 +53,14 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 				log.warn("There is an action in progress for user {} , received update {} won't be processed", userId, updateId);
 				return null;
 			} else {
-				// later move this code
-				BotApiMethod<?> process = updateService.process(userId, update);
-				if (process != null) {
-					// fix
-					return process;
-				}
-				if (userService.exists(userId)) {
-					return messageBuilder.createMessage(userId, START.getCommandResponse());
-				} else {
-					lockService.createLock(userId);
+				lockService.createLock(userId);
 
-					String actionData = updateService.retrieveActionData(update);
-					String username = updateService.getUsername(update);
-					BotApiMethod<?> response = registrationService.register(userId, update, actionData, username);
+				Action action = actionProvider.retrieve(update);
+				actionRouter.route(action);
 
-					if (response != null) {
-						lockService.releaseLock(userId);
-						log.debug("Response type for the update: {}", response.getMethod());
-					}
-					log.info("The update has been processed successfully");
-					return response;
-				}
+				log.info("The update has been processed successfully");
 			}
+			return null;
 		} catch (Exception e) {
 			//TODO add retry logic and updates validation
 			lockService.releaseLock(userId);

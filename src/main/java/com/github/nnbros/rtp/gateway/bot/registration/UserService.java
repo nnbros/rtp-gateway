@@ -2,6 +2,7 @@ package com.github.nnbros.rtp.gateway.bot.registration;
 
 import com.github.nnbros.rtp.gateway.model.User;
 import com.github.nnbros.rtp.gateway.repository.UserRepository;
+import com.github.nnbros.rtp.gateway.util.ActionError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 	private final UserRepository repository;
-	private final Map<Long, Context> unregisteredUsers = new HashMap<>();
+	private final Map<Long, UnregisteredUserContext> unregisteredUsers = new HashMap<>();
 	@Value("${gateway.user.unregistered.ttl}")
 	private Duration ttl;
 
@@ -40,7 +41,7 @@ public class UserService {
 			repository.updateLastAction(userId, lastAction);
 		} else {
 			unregisteredUsers.merge(userId,
-					Context.builder()
+					UnregisteredUserContext.builder()
 							.createTime(Instant.now())
 							.lastAction(lastAction)
 							.build(), (contextOld, contextNew) -> {
@@ -65,7 +66,7 @@ public class UserService {
 		User user = new User();
 		user.setId(userId);
 		user.setUsername(username);
-		String lastAction = getLastAction(user.getId()).orElse("no action");
+		String lastAction = getLastAction(user.getId()).orElse(ActionError.ERROR_UNKNOWN.name());
 		user.setLastAction(lastAction);
 		repository.save(user);
 		// after save user is considered to be registered, so remove the user from the unregistered users map

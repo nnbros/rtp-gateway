@@ -1,13 +1,13 @@
 package com.github.nnbros.rtp.gateway.client;
 
-import com.github.nnbros.rtp.gateway.model.ClientType;
+import com.github.nnbros.rtp.gateway.model.ActionProcessorType;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Set;
 
-import static com.github.nnbros.rtp.gateway.model.ClientType.STORYTELLER;
+import static com.github.nnbros.rtp.gateway.model.ActionProcessorType.STORYTELLER;
 
 @FeignClient(name = "storyteller",
 		url = "${spring.cloud.openfeign.client.config.storyteller.url}",
@@ -19,7 +19,7 @@ public interface StorytellerServiceClient {
 	@DeleteMapping("cache/registration")
 	void unregisterUsers(@RequestBody Set<Long> userId);
 
-	default ClientType name() {
+	default ActionProcessorType name() {
 		return STORYTELLER;
 	}
 }

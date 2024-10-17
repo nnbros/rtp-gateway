@@ -30,3 +30,5 @@ spring:
                     storyteller:
                         url: http://127.0.0.1
                         path: /api/v1/
+    config:
+        import: classpath:/configuration/actions_mapping.yml
