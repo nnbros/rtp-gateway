@@ -70,6 +70,7 @@ logging:
 
 gateway:
     rtp-bot:
+        webhook-enabled: true
         url: https://rtp-bot.ru:8443/dev
         ip: 93.120.241.248
         webhook-path: rtp

@@ -18,16 +18,16 @@ import java.util.Set;
 @Service
 public class ActionRouter {
 	private final UserService userService;
-	private final Map<String, List<ActionProcessor>> processors;
+	private final Map<String, List<ActionProcessor>> actionProcessors;
 	private final DefaultActionProcessor defaultActionProcessor;
 	private final Set<String> allowedActionsForUnregisteredUsers;
 
 	public ActionRouter(UserService userService,
-						Map<String, List<ActionProcessor>> processors,
+						Map<String, List<ActionProcessor>> actionProcessors,
 						DefaultActionProcessor defaultActionProcessor,
 						Actions actions) {
 		this.userService = userService;
-		this.processors = processors;
+		this.actionProcessors = actionProcessors;
 		this.defaultActionProcessor = defaultActionProcessor;
 		allowedActionsForUnregisteredUsers = actions.getAllowedForUnregisteredUsers();
 	}
@@ -38,7 +38,7 @@ public class ActionRouter {
 
 		retrieveErrorAction(action)
 				.ifPresentOrElse(defaultActionProcessor::process, () ->
-						processors.get(actionId)
+						actionProcessors.get(actionId)
 								.forEach(processor -> processor.process(action)));
 	}
 
@@ -46,15 +46,17 @@ public class ActionRouter {
 		String actionId = action.actionId();
 		Update update = action.update();
 		Long userId = action.userId();
-		if (userService.exists(userId)) {
-			return Optional.of(new Action(ActionError.ERROR_USER_ALREADY_REGISTERED.name(), ActionError.ERROR_USER_ALREADY_REGISTERED.getText(), update, userId));
-		}
-		if (processors.containsKey(actionId)) {
+		if (actionProcessors.containsKey(actionId)) {
 			if (!allowedActionsForUnregisteredUsers.contains(actionId)) {
 				return Optional.of(new Action(ActionError.ERROR_NOT_ALLOWED.name(), ActionError.ERROR_NOT_ALLOWED.getText(), update, userId));
 			}
+		} else if (ActionError.names().contains(actionId)) {
+			return Optional.of(action);
 		} else {
 			return Optional.of(new Action(ActionError.ERROR_UNKNOWN.name(), ActionError.ERROR_UNKNOWN.getText(), update, userId));
+		}
+		if (userService.exists(userId)) {
+			return Optional.of(new Action(ActionError.ERROR_USER_ALREADY_REGISTERED.name(), ActionError.ERROR_USER_ALREADY_REGISTERED.getText(), update, userId));
 		}
 		return Optional.empty();
 	}

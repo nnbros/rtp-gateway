@@ -1,5 +1,6 @@
 gateway:
     rtp-bot:
+        webhook-enabled: true
         url: https://test.com:1234
         ip: 127.0.0.1
         webhook-path: testPath

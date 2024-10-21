@@ -2,6 +2,7 @@ package com.github.nnbros.rtp.gateway.bot;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updates.DeleteWebhook;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -9,6 +10,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "gateway.rtp-bot.webhook-enabled", havingValue = "true")
 public class WebhookRemover implements Runnable {
 	private final TelegramClient telegramClient;
 

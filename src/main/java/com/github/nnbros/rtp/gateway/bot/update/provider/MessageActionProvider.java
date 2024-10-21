@@ -22,10 +22,9 @@ public class MessageActionProvider implements ActionProvider {
 		Message message = update.hasMessage() ? update.getMessage() : update.getEditedMessage();
 		Long userId = message.getFrom().getId();
 
-		String action = userService.getLastAction(userId)
+		return userService.getLastAction(userId)
 				.filter(lastAction -> Set.of(STORYTELLER_CREATE_CHAR_GENDER, STORYTELLER_CREATE_CHAR_NAME).contains(lastAction))
-				.map(s -> STORYTELLER_CREATE_CHAR_NAME)
-				.orElse(ActionError.ERROR_UNKNOWN.name());
-		return new Action(action, null, update, userId);
+				.map(s ->  new Action(STORYTELLER_CREATE_CHAR_NAME, null, update, userId))
+				.orElse(new Action(ActionError.ERROR_UNKNOWN.name(), ActionError.ERROR_UNKNOWN.getText(), update, userId));
 	}
 }

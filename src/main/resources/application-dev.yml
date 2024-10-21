@@ -18,11 +18,16 @@ logging:
 
 spring:
     datasource:
-        url: jdbc:postgresql://93.120.241.248:8543/rtp
+        url: jdbc:postgresql://localhost:5432/gateway
+        username: gateway
+        password: gateway
 
     cloud:
         openfeign:
             client:
                 config:
                     storyteller:
-                        url: http://192.168.0.104:8085
+                        url: http://localhost:8085
+gateway:
+    rtp-bot:
+        webhook-enabled: false

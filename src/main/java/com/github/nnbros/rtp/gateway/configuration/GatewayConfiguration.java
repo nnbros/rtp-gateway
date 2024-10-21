@@ -34,14 +34,14 @@ public class GatewayConfiguration {
 	}
 
 	@Bean
-	public Map<String, List<ActionProcessor>> actionProcessor(Actions actions, TreeSet<ActionProcessor> actionProcessors) {
+	public Map<String, List<ActionProcessor>> actionProcessors(Actions actions, Collection<ActionProcessor> processors) {
+		TreeSet<ActionProcessor> sortedProcessors = new TreeSet<>(processors);
 		return actions.getMapping()
 				.entrySet()
 				.stream()
-				.collect(Collectors.toMap(Map.Entry::getKey, entry -> getProcessors(entry.getValue(), actionProcessors)));
+				.collect(Collectors.toMap(Map.Entry::getKey, entry -> getProcessors(entry.getValue(), sortedProcessors)));
 	}
 
-	//todo check sorting
 	private List<ActionProcessor> getProcessors(Collection<ActionProcessorType> processorTypes, TreeSet<ActionProcessor> actionProcessors) {
 		return actionProcessors.stream()
 				.filter(processor -> processorTypes.contains(processor.getType()))
