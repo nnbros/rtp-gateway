@@ -16,7 +16,7 @@ public class RegistrationService {
 
 	@Scheduled(initialDelayString = "${gateway.user.unregistered.ttl}", fixedRateString = "${gateway.user.unregistered.ttl}")
 	public void removeUnregisteredUsers() {
-		Set<Long> usersToDelete = userService.usersToDelete();
+		Set<Long> usersToDelete = userService.unregisteredUsersToDelete();
 		usersToDelete.forEach(userService::remove);
 		log.info("Removed unregistered users with ids={} from cache", usersToDelete.stream()
 				.map(Object::toString)

@@ -1,5 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot.update;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -14,32 +15,34 @@ import java.util.Map;
  * We shouldn't process other actions before the first action is completed
  */
 
+@Slf4j
 @Service
 public class LockService {
 	private final Map<Long, Instant> lockedUsers;
 	@Value("${gateway.user.lock.ttl}")
 	private Duration ttl;
 
-    public LockService() {
-        this.lockedUsers = new HashMap<>();
-    }
+	public LockService() {
+		this.lockedUsers = new HashMap<>();
+	}
 
-    public boolean isLocked(Long userId) {
+	public boolean isLocked(Long userId) {
 		return lockedUsers.containsKey(userId);
 	}
 
 	public void createLock(Long userId) {
+		log.debug("Created lock for user = {}", userId);
 		lockedUsers.put(userId, Instant.now());
 	}
 
 	public void releaseLock(Long userId) {
+		log.debug("Released lock for user = {}", userId);
 		lockedUsers.remove(userId);
 	}
 
 	@Scheduled(initialDelayString = "${gateway.user.lock.ttl}", fixedRateString = "${gateway.user.lock.ttl}")
 	public void releaseLocks() {
 		lockedUsers.entrySet()
-				.removeIf(entry ->
-						Duration.between(entry.getValue(), Instant.now()).compareTo(ttl) > 0);
+				.removeIf(entry -> Duration.between(entry.getValue(), Instant.now()).compareTo(ttl) > 0);
 	}
 }

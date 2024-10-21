@@ -4,6 +4,7 @@ import com.github.nnbros.rtp.gateway.model.User;
 import com.github.nnbros.rtp.gateway.repository.UserRepository;
 import com.github.nnbros.rtp.gateway.util.ActionError;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -28,15 +30,14 @@ public class UserService {
 	}
 
 	public Optional<String> getLastAction(Long userId) {
-		if (unregisteredUsers.containsKey(userId)) {
-			return Optional.ofNullable(unregisteredUsers.get(userId).getLastAction());
-		} else {
-			return repository.findById(userId)
-					.map(User::getLastAction);
-		}
+		return Optional.ofNullable(unregisteredUsers.get(userId))
+				.map(UnregisteredUserContext::getLastAction)
+				.or(() -> repository.findById(userId)
+						.map(User::getLastAction));
 	}
 
 	public void updateLastAction(Long userId, String lastAction) {
+		log.debug("Last action updated to {} for user id = {}", userId, lastAction);
 		if (exists(userId)) {
 			repository.updateLastAction(userId, lastAction);
 		} else {
@@ -55,7 +56,7 @@ public class UserService {
 		unregisteredUsers.remove(userId);
 	}
 
-	public Set<Long> usersToDelete() {
+	public Set<Long> unregisteredUsersToDelete() {
 		return unregisteredUsers.entrySet().stream()
 				.filter(entry -> Duration.between(entry.getValue().getCreateTime(), Instant.now()).compareTo(ttl) > 0)
 				.map(Map.Entry::getKey)
@@ -63,6 +64,7 @@ public class UserService {
 	}
 
 	public void create(Long userId, String username) {
+		log.debug("A new user id={}, name={} was created", userId, username);
 		User user = new User();
 		user.setId(userId);
 		user.setUsername(username);

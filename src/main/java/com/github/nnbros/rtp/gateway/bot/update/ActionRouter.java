@@ -2,7 +2,7 @@ package com.github.nnbros.rtp.gateway.bot.update;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
 import com.github.nnbros.rtp.gateway.bot.update.processor.ActionProcessor;
-import com.github.nnbros.rtp.gateway.bot.update.processor.DefaultActionProcessor;
+import com.github.nnbros.rtp.gateway.bot.update.processor.ErrorActionProcessor;
 import com.github.nnbros.rtp.gateway.configuration.Actions;
 import com.github.nnbros.rtp.gateway.util.ActionError;
 import lombok.extern.slf4j.Slf4j;
@@ -19,16 +19,16 @@ import java.util.Set;
 public class ActionRouter {
 	private final UserService userService;
 	private final Map<String, List<ActionProcessor>> actionProcessors;
-	private final DefaultActionProcessor defaultActionProcessor;
+	private final ErrorActionProcessor errorActionProcessor;
 	private final Set<String> allowedActionsForUnregisteredUsers;
 
 	public ActionRouter(UserService userService,
 						Map<String, List<ActionProcessor>> actionProcessors,
-						DefaultActionProcessor defaultActionProcessor,
+						ErrorActionProcessor errorActionProcessor,
 						Actions actions) {
 		this.userService = userService;
 		this.actionProcessors = actionProcessors;
-		this.defaultActionProcessor = defaultActionProcessor;
+		this.errorActionProcessor = errorActionProcessor;
 		allowedActionsForUnregisteredUsers = actions.getAllowedForUnregisteredUsers();
 	}
 
@@ -37,7 +37,7 @@ public class ActionRouter {
 		String actionId = action.actionId();
 
 		retrieveErrorAction(action)
-				.ifPresentOrElse(defaultActionProcessor::process, () ->
+				.ifPresentOrElse(errorActionProcessor::process, () ->
 						actionProcessors.get(actionId)
 								.forEach(processor -> processor.process(action)));
 	}
@@ -46,15 +46,19 @@ public class ActionRouter {
 		String actionId = action.actionId();
 		Update update = action.update();
 		Long userId = action.userId();
+		log.info("Routing action = {}, from user = {}", actionId, userId);
 		if (actionProcessors.containsKey(actionId)) {
 			if (!allowedActionsForUnregisteredUsers.contains(actionId)) {
 				return Optional.of(new Action(ActionError.ERROR_NOT_ALLOWED.name(), ActionError.ERROR_NOT_ALLOWED.getText(), update, userId));
 			}
-		} else if (ActionError.names().contains(actionId)) {
-			return Optional.of(action);
 		} else {
-			return Optional.of(new Action(ActionError.ERROR_UNKNOWN.name(), ActionError.ERROR_UNKNOWN.getText(), update, userId));
+			if (ActionError.names().contains(actionId)) {
+				return Optional.of(action);
+			} else {
+				return Optional.of(new Action(ActionError.ERROR_UNKNOWN.name(), ActionError.ERROR_UNKNOWN.getText(), update, userId));
+			}
 		}
+		// todo review after other actions implemented
 		if (userService.exists(userId)) {
 			return Optional.of(new Action(ActionError.ERROR_USER_ALREADY_REGISTERED.name(), ActionError.ERROR_USER_ALREADY_REGISTERED.getText(), update, userId));
 		}

@@ -3,7 +3,6 @@ package com.github.nnbros.rtp.gateway.bot.update.processor;
 import com.github.nnbros.rtp.gateway.bot.MessageBuilder;
 import com.github.nnbros.rtp.gateway.bot.update.Action;
 import com.github.nnbros.rtp.gateway.bot.update.LockService;
-import com.github.nnbros.rtp.gateway.model.ActionProcessorType;
 import com.github.nnbros.rtp.gateway.util.ActionError;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -14,12 +13,11 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DefaultActionProcessor implements ActionProcessor {
+public class ErrorActionProcessor {
 	private final LockService lockService;
 	private final TelegramClient client;
 	private final MessageBuilder messageBuilder;
 
-	@Override
 	@SneakyThrows
 	public void process(Action action) {
 		Long userId = action.userId();
@@ -28,15 +26,5 @@ public class DefaultActionProcessor implements ActionProcessor {
 			log.info("unlock user {}", userId);
 			client.execute(messageBuilder.createMessage(userId, action.data()));
 		}
-	}
-
-	@Override
-	public ActionProcessorType getType() {
-		return ActionProcessorType.DEFAULT;
-	}
-
-	@Override
-	public int getOrder() {
-		return 0;
 	}
 }
