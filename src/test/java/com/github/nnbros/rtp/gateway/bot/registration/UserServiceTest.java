@@ -10,8 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.Duration;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.TEST_USER_ID;
 
@@ -52,5 +55,15 @@ public class UserServiceTest {
 		userService.updateLastAction(TEST_USER_ID, ACTION);
 		userService.create(TEST_USER_ID, USERNAME);
 		Mockito.verify(repository, Mockito.times(1)).save(ArgumentMatchers.any(User.class));
+	}
+
+	@Test
+	void checkUsersToDelete() {
+		userService.updateLastAction(TEST_USER_ID, ACTION);
+		userService.updateLastAction(124L, ACTION);
+		ReflectionTestUtils.setField(userService, "ttl", Duration.ofMillis(0));
+
+		Set<Long> actual = userService.unregisteredUsersToDelete();
+		Assertions.assertEquals(Set.of(TEST_USER_ID, 124L), actual);
 	}
 }

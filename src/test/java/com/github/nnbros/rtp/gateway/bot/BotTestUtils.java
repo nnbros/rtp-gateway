@@ -1,5 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot;
 
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -47,6 +48,18 @@ public class BotTestUtils {
 		return message;
 	}
 
+	public static CallbackQuery createCallbackQuery(String data) {
+		CallbackQuery callbackQuery = new CallbackQuery();
+		User from = User.builder()
+				.id(TEST_USER_ID)
+				.firstName("TestUser")
+				.isBot(false)
+				.build();
+		callbackQuery.setData(data);
+		callbackQuery.setFrom(from);
+		return callbackQuery;
+	}
+
 	public static Update createTestEmptyUpdate() {
 		Update update = new Update();
 		update.setUpdateId(TEST_UPDATE_ID);
@@ -56,6 +69,13 @@ public class BotTestUtils {
 	public static Update createTestMessageUpdate() {
 		Update update = new Update();
 		update.setMessage(createTestMessage());
+		update.setUpdateId(TEST_UPDATE_ID);
+		return update;
+	}
+
+	public static Update createTestCallbackQueryUpdate(String data) {
+		Update update = new Update();
+		update.setCallbackQuery(createCallbackQuery(data));
 		update.setUpdateId(TEST_UPDATE_ID);
 		return update;
 	}

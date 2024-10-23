@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -20,6 +21,8 @@ public class MessageActionProvider implements ActionProvider {
 	@Override
 	public Action retrieve(Update update) {
 		Message message = update.hasMessage() ? update.getMessage() : update.getEditedMessage();
+		Objects.requireNonNull(message, "Message cannot be empty");
+
 		Long userId = message.getFrom().getId();
 
 		return userService.getLastAction(userId)
