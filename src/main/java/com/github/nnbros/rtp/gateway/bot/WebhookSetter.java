@@ -4,6 +4,7 @@ import com.github.nnbros.rtp.gateway.configuration.GatewayProperties;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -17,6 +18,7 @@ import static com.github.nnbros.rtp.gateway.util.ResourceUtils.getResourceAsStre
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "gateway.rtp-bot.webhook-enabled", havingValue = "true")
 public class WebhookSetter implements Runnable {
 	private final TelegramClient telegramClient;
 	private final GatewayProperties properties;

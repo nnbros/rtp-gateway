@@ -1,6 +1,6 @@
 package com.github.nnbros.rtp.gateway.util;
 
-import com.github.nnbros.rtp.gateway.bot.UpdateType;
+import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,7 +8,8 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BotUtilsTest {
 
@@ -17,9 +18,9 @@ class BotUtilsTest {
 	void getUserIdForMessage(UpdateType updateType) {
 		Update update = createTestMessageUpdate();
 
-		String userId = BotUtils.getUserId(update, updateType);
+		Long userId = BotUtils.getUserId(update, updateType);
 
-		assertEquals(String.valueOf(TEST_CHAT_ID), userId);
+		assertEquals(TEST_USER_ID, userId);
 	}
 
 	@ParameterizedTest
@@ -27,9 +28,9 @@ class BotUtilsTest {
 	void getUserIdForEditedMessage(UpdateType updateType) {
 		Update update = createTestEditedMessageUpdate();
 
-		String userId = BotUtils.getUserId(update, updateType);
+		Long userId = BotUtils.getUserId(update, updateType);
 
-		assertEquals(String.valueOf(TEST_CHAT_ID), userId);
+		assertEquals(TEST_USER_ID, userId);
 	}
 
 	@Test

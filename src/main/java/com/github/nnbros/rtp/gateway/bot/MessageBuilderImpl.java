@@ -7,9 +7,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class MessageBuilderImpl implements MessageBuilder {
 
 	@Override
-	public SendMessage createMessage(String chatId, String text) {
+	public SendMessage createMessage(Long userId, String text) {
 		return SendMessage.builder()
-				.chatId(chatId)
+				.chatId(userId)
 				.text(text)
 				.build();
 	}

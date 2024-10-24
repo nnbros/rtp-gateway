@@ -25,6 +25,7 @@ public class GatewayProperties {
 	@Setter
 	@Getter
 	public static class RTPBot {
+		private boolean webhookEnabled = true;
 		@NotNull
 		private URI url = URI.create("https://rtp-bot.ru:8443");
 		@NotBlank

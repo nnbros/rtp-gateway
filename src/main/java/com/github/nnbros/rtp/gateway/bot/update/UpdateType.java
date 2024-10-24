@@ -1,4 +1,4 @@
-package com.github.nnbros.rtp.gateway.bot;
+package com.github.nnbros.rtp.gateway.bot.update;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -7,6 +7,7 @@ public enum UpdateType {
 	EDITED_COMMAND,
 	MESSAGE,
 	EDITED_MESSAGE,
+	CALLBACK_QUERY,
 	UNKNOWN;
 
 	public static UpdateType getUpdateType(Update update) {
@@ -20,7 +21,10 @@ public enum UpdateType {
 				return EDITED_COMMAND;
 			}
 			return EDITED_MESSAGE;
+		} else if (update.hasCallbackQuery()) {
+			return CALLBACK_QUERY;
 		}
+
 		return UNKNOWN;
 	}
 }

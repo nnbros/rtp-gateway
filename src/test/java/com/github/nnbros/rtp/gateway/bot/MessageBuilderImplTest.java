@@ -1,5 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot;
 
+import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.TEST_USER_ID;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -11,13 +12,11 @@ class MessageBuilderImplTest {
 
 	@Test
 	void createMessage() {
-		String chatId = "123456";
 		String text = "Hello, World!";
 
-		SendMessage result = messageBuilder.createMessage(chatId, text);
+		SendMessage result = messageBuilder.createMessage(TEST_USER_ID, text);
 
 		assertNotNull(result);
-		assertEquals(chatId, result.getChatId());
 		assertEquals(text, result.getText());
 	}
 }

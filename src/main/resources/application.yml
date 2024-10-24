@@ -1,0 +1,83 @@
+#####
+# Main Spring settings
+#####
+spring:
+    application:
+        name: gateway
+    config:
+        import: classpath:/configuration/actions_mapping.yml
+    output:
+        ansi:
+            enabled: ALWAYS
+
+#####
+# Data source settings
+#####
+    datasource:
+        url: jdbc:postgresql://postgres:5432/rtp
+        username: ${DB_USER}
+        password: ${DB_PASSWORD}
+        hikari:
+            data-source-properties:
+                stringtype: unspecified
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        show-sql: false
+        properties:
+            hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    liquibase:
+        liquibase-schema: gateway
+        change-log: liquibase/db.changelog-master.yaml
+        url: ${spring.datasource.url}
+        user: ${spring.datasource.username}
+        password: ${spring.datasource.password}
+        show-summary-output: all
+        ui-service: LOGGER
+    cloud:
+        openfeign:
+            client:
+                config:
+                    storyteller:
+                        url: http://storyteller:8085
+                        path: /api/v1/
+                    default:
+                        loggerLevel: basic
+
+#####
+# Network settings
+#####
+server:
+    port: 8080
+
+#####
+# Logging settings
+#####
+logging:
+    level:
+        org:
+            springframework:
+                boot:
+                    autoconfigure: ERROR
+    file:
+        name: /var/log/rtp/gateway/gateway.log
+    pattern:
+        console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr([%t]){faint} %clr(%-40.40logger{39}){cyan} : %X{chatId} %X{updateId} %m%n%wEx"
+
+#####
+# Main Gateway settings
+#####
+gateway:
+    rtp-bot:
+        webhook-enabled: true
+        url: https://rtp-bot.ru:8443/dev
+        ip: 93.120.241.248
+        webhook-path: rtp
+        token: ${RTP_BOT_TOKEN}
+    certificate-name: rtpbot-chain.crt
+    certificate-path: /certificates/${gateway.certificate-name}
+    user:
+        lock:
+            ttl: PT1M
+        unregistered:
+            ttl: PT24H

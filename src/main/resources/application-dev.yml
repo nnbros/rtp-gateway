@@ -1,0 +1,33 @@
+debug: true
+
+logging:
+    level:
+        root: INFO
+        web: DEBUG
+        org:
+            springframework:
+                boot:
+                    autoconfigure: ERROR
+        com:
+            github:
+                nnbros:
+                    rtp: DEBUG
+    file:
+        path: ""
+        name: ""
+
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/gateway
+        username: gateway
+        password: gateway
+
+    cloud:
+        openfeign:
+            client:
+                config:
+                    storyteller:
+                        url: http://localhost:8085
+gateway:
+    rtp-bot:
+        webhook-enabled: false

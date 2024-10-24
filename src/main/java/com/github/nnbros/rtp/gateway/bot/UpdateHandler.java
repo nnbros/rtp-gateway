@@ -1,5 +1,7 @@
 package com.github.nnbros.rtp.gateway.bot;
 
+import com.github.nnbros.rtp.gateway.bot.update.*;
+import com.github.nnbros.rtp.gateway.bot.update.provider.ActionProvider;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.EnumMap;
 import java.util.function.Function;
 
 import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
@@ -16,39 +19,51 @@ import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
 @Service
 @RequiredArgsConstructor
 public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
+
+	private final ActionRouter actionRouter;
+	private final EnumMap<UpdateType, ActionProvider> actionProviders;
+	private final LockService lockService;
+	private final MessageBuilder messageBuilder;
 	private static final String CHAT_ID_MDC_KEY = "chatId";
 	private static final String UPDATE_ID_MDC_KEY = "updateId";
 	public static final String UNKNOWN_UPDATE_RESPONSE_MESSAGE = "Sorry, there is no functionality implemented to process your request.";
 
-	private final CommandService commandService;
-	private final MessageBuilder messageBuilder;
-
 	@Override
 	public BotApiMethod<?> apply(Update update) {
 		Integer updateId = update.getUpdateId();
+		Long userId = 0L;
 		try {
 			log.info("New update has been received, update id is {}", updateId);
 			log.trace("Update:\n{}", update);
 
 			UpdateType updateType = UpdateType.getUpdateType(update);
 			log.debug("Update type is [{}]", updateType);
-			String userId = getUserId(update, updateType);
+			userId = getUserId(update, updateType);
 			MDC.put(CHAT_ID_MDC_KEY, "[%s]".formatted(userId));
 			MDC.put(UPDATE_ID_MDC_KEY, "[%d]".formatted(updateId));
 
-			BotApiMethod<?> response;
-			if (updateType == UpdateType.COMMAND || updateType == UpdateType.EDITED_COMMAND) {
-				response = commandService.processUpdate(update);
+			ActionProvider actionProvider;
+			if (actionProviders.containsKey(updateType)) {
+				actionProvider = actionProviders.get(updateType);
 			} else {
 				log.info("The update type is unknown and it will not be processed");
-				response = messageBuilder.createMessage(userId, UNKNOWN_UPDATE_RESPONSE_MESSAGE);
+				return messageBuilder.createMessage(userId, UNKNOWN_UPDATE_RESPONSE_MESSAGE);
 			}
+			if (lockService.isLocked(userId)) {
+				log.warn("There is an action in progress for user {} , received update {} won't be processed", userId, updateId);
+				return null;
+			} else {
+				lockService.createLock(userId);
 
-			log.debug("Response type for the update: {}", response.getMethod());
-			log.info("The update has been processed successfully");
-			return response;
+				Action action = actionProvider.retrieve(update);
+				actionRouter.route(action);
+
+				log.info("The update has been processed successfully");
+			}
+			return null;
 		} catch (Exception e) {
 			//TODO add retry logic and updates validation
+			lockService.releaseLock(userId);
 			throw new GatewayRuntimeException("Failed to process update %s".formatted(updateId), e);
 		} finally {
 			MDC.clear();

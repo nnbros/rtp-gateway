@@ -1,0 +1,15 @@
+actions:
+    mapping:
+        storyteller_create_char_start: STORYTELLER, USER_UPDATER
+        storyteller_create_char_gender: STORYTELLER, USER_UPDATER
+        storyteller_create_char_name: STORYTELLER, USER_UPDATER
+        storyteller_create_char_class_selection: STORYTELLER, USER_UPDATER
+        storyteller_create_char_class_confirmation: STORYTELLER, USER_UPDATER
+        storyteller_create_char_registration: STORYTELLER, USER_UPDATER, REGISTRAR
+    allowed_for_unregistered_users:
+    - storyteller_create_char_start
+    - storyteller_create_char_gender
+    - storyteller_create_char_name
+    - storyteller_create_char_class_selection
+    - storyteller_create_char_class_confirmation
+    - storyteller_create_char_registration
