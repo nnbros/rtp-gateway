@@ -6,22 +6,13 @@ spring:
         name: gateway
     config:
         import: classpath:/configuration/actions_mapping.yml
-
-    # SSL settings
-#    ssl:
-#        bundle:
-#            pem:
-#                rtp:
-#                    keystore:
-#                        certificate: classpath:/certificates/${gateway.certificate-name}
-#                        private-key: /app/certificates/rtpbot.key
-#                    truststore:
-#                        certificate: classpath:/certificates/root.crt
     output:
         ansi:
             enabled: ALWAYS
 
-    # Data source settings
+#####
+# Data source settings
+#####
     datasource:
         url: jdbc:postgresql://postgres:5432/rtp
         username: ${DB_USER}
@@ -43,7 +34,6 @@ spring:
         password: ${spring.datasource.password}
         show-summary-output: all
         ui-service: LOGGER
-
     cloud:
         openfeign:
             client:
@@ -54,9 +44,15 @@ spring:
                     default:
                         loggerLevel: basic
 
+#####
+# Network settings
+#####
 server:
     port: 8080
 
+#####
+# Logging settings
+#####
 logging:
     level:
         org:
@@ -68,6 +64,9 @@ logging:
     pattern:
         console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr([%t]){faint} %clr(%-40.40logger{39}){cyan} : %X{chatId} %X{updateId} %m%n%wEx"
 
+#####
+# Main Gateway settings
+#####
 gateway:
     rtp-bot:
         webhook-enabled: true
