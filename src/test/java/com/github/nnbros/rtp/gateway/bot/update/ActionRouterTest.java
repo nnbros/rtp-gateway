@@ -5,6 +5,7 @@ import com.github.nnbros.rtp.gateway.bot.update.processor.ActionProcessor;
 import com.github.nnbros.rtp.gateway.bot.update.processor.ErrorActionProcessor;
 import com.github.nnbros.rtp.gateway.bot.update.processor.UserUpdateActionProcessor;
 import com.github.nnbros.rtp.gateway.configuration.Actions;
+import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
 import com.github.nnbros.rtp.gateway.util.ActionError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.TEST_USER_ID;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,7 +48,7 @@ class ActionRouterTest {
 		Map<String, List<ActionProcessor>> actionProcessors = Map.of(
 				TEST_ACTION, List.of(userUpdateActionProcessor),
 				OTHER_TEST_ACTION, List.of(userUpdateActionProcessor));
-		actionRouter = new ActionRouter(userService, actionProcessors, errorActionProcessor, actions);
+		actionRouter = new ActionRouter(userService, actionProcessors, actions);
 	}
 
 	@Test
@@ -57,15 +60,16 @@ class ActionRouterTest {
 	@Test
 	void checkFailedRouteUserExists() {
 		Mockito.when(userService.exists(TEST_USER_ID)).thenReturn(true);
-		actionRouter.route(new Action(TEST_ACTION, null, mock(Update.class), TEST_USER_ID));
-		verify(errorActionProcessor, times(1)).process(ArgumentMatchers.any(Action.class));
+		UpdateRuntimeException actual = assertThrows(UpdateRuntimeException.class, () ->
+				actionRouter.route(new Action(TEST_ACTION, null, mock(Update.class), TEST_USER_ID)));
+		assertEquals(ActionError.ERROR_USER_ALREADY_REGISTERED.getText(), actual.getMessage());
 	}
 
 	@ParameterizedTest
 	@MethodSource("errors")
 	void checkFailedRoute(String actionId) {
-		actionRouter.route(new Action(actionId, null, mock(Update.class), TEST_USER_ID));
-		verify(errorActionProcessor, times(1)).process(ArgumentMatchers.any(Action.class));
+		assertThrows(UpdateRuntimeException.class, () ->
+				actionRouter.route(new Action(actionId, null, mock(Update.class), TEST_USER_ID)));
 	}
 
 	private static Stream<Arguments> errors() {

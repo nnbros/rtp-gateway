@@ -1,11 +1,18 @@
 package com.github.nnbros.rtp.gateway.bot;
 
-import com.github.nnbros.rtp.gateway.bot.update.*;
+import com.github.nnbros.rtp.gateway.bot.update.Action;
+import com.github.nnbros.rtp.gateway.bot.update.LockService;
+import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
+import com.github.nnbros.rtp.gateway.bot.update.processor.ErrorActionProcessor;
 import com.github.nnbros.rtp.gateway.bot.update.provider.ActionProvider;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
+import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
+import com.github.nnbros.rtp.gateway.model.Events;
+import com.github.nnbros.rtp.gateway.model.States;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -19,11 +26,11 @@ import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
 @Service
 @RequiredArgsConstructor
 public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
-
-	private final ActionRouter actionRouter;
 	private final EnumMap<UpdateType, ActionProvider> actionProviders;
 	private final LockService lockService;
 	private final MessageBuilder messageBuilder;
+	private final ErrorActionProcessor errorProcessor;
+	private final StateMachine<States, Events> stateMachine;
 	private static final String CHAT_ID_MDC_KEY = "chatId";
 	private static final String UPDATE_ID_MDC_KEY = "updateId";
 	public static final String UNKNOWN_UPDATE_RESPONSE_MESSAGE = "Sorry, there is no functionality implemented to process your request.";
@@ -51,16 +58,21 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 			}
 			if (lockService.isLocked(userId)) {
 				log.warn("There is an action in progress for user {} , received update {} won't be processed", userId, updateId);
-				return null;
 			} else {
 				lockService.createLock(userId);
 
 				Action action = actionProvider.retrieve(update);
-				actionRouter.route(action);
 
-				log.info("The update has been processed successfully");
+				stateMachine.getExtendedState().getVariables().put("ACTION", action);
+				boolean accepted = stateMachine.sendEvent(Events.valueOf(action.actionId()));
+
+				log.info("The update has been processed successfully, accepted = {}", accepted);
+				if (!accepted) {
+					throw new UpdateRuntimeException("Команда не может быть обработана. Попробуйте выполнить другое действие", action.userId());
+				}
 			}
-			return null;
+		} catch (UpdateRuntimeException e) {
+			errorProcessor.process(userId, e.getMessage());
 		} catch (Exception e) {
 			//TODO add retry logic and updates validation
 			lockService.releaseLock(userId);
@@ -68,5 +80,6 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 		} finally {
 			MDC.clear();
 		}
+		return null;
 	}
 }
