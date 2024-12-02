@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public enum ActionError {
 	ERROR_USER_ALREADY_REGISTERED("Вы уже зарегистрированы."),
 	ERROR_HELP("Здесь когда-нибудь будет справка по боту."),
-	ERROR_NOT_ALLOWED("Эта команда - непозволительная роскошь :|"),
+	ERROR_NOT_ALLOWED("Команда не может быть обработана. Попробуйте выполнить другое действие"),
 	ERROR_UNKNOWN("Не знаю такой команды :(");
 
 	private final String text;

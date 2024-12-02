@@ -30,7 +30,7 @@ class ErrorActionProcessorTest {
 	void checkProcessError() throws TelegramApiException {
 		Mockito.when(messageBuilder.createMessage(TEST_USER_ID, null)).thenReturn(new SendMessage("chat", "text"));
 
-		processor.process(TEST_USER_ID, null);
+		processor.process(TEST_USER_ID, null, null);
 		Mockito.verify(lockService, Mockito.times(1)).releaseLock(ArgumentMatchers.anyLong());
 		Mockito.verify(client, Mockito.times(1)).execute(ArgumentMatchers.any(SendMessage.class));
 	}

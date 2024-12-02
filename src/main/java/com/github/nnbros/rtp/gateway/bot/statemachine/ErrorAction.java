@@ -21,6 +21,6 @@ public class ErrorAction implements Action<States, Events> {
 	public void execute(StateContext<States, Events> context) {
 		var action = context.getExtendedState().get("ACTION", com.github.nnbros.rtp.gateway.bot.update.Action.class);
 		Long userId = action.userId();
-		errorProcessor.process(userId, context.getException().getMessage());
+		errorProcessor.process(userId, null, context.getException().getMessage());
 	}
 }

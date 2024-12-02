@@ -2,8 +2,7 @@ package com.github.nnbros.rtp.gateway.bot.update.provider;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
 import com.github.nnbros.rtp.gateway.bot.update.Action;
-import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
-import com.github.nnbros.rtp.gateway.util.ActionError;
+import com.github.nnbros.rtp.gateway.exception.UnknownMessageException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,9 +40,7 @@ class MessageActionProviderTest {
 	@Test
 	void checkUnknownAction() {
 		Update update = createTestEditedMessageUpdate();
-		UpdateRuntimeException actual = assertThrows(UpdateRuntimeException.class, () -> provider.retrieve(update));
-
-		assertEquals(ActionError.ERROR_UNKNOWN.getText(), actual.getMessage());
+		assertThrows(UnknownMessageException.class, () -> provider.retrieve(update));
 	}
 
 	@ParameterizedTest
@@ -62,9 +59,7 @@ class MessageActionProviderTest {
 		Update update = createTestMessageUpdate();
 		Mockito.when(userService.getLastAction(TEST_USER_ID)).thenReturn(Optional.of(actionId));
 
-		UpdateRuntimeException actual = assertThrows(UpdateRuntimeException.class, () -> provider.retrieve(update));
-
-		assertEquals(ActionError.ERROR_UNKNOWN.getText(), actual.getMessage());
+		assertThrows(UnknownMessageException.class, () -> provider.retrieve(update));
 	}
 
 	private static Stream<Arguments> lastActions() {

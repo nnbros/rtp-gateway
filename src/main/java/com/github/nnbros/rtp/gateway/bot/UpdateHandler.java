@@ -6,6 +6,7 @@ import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
 import com.github.nnbros.rtp.gateway.bot.update.processor.ErrorActionProcessor;
 import com.github.nnbros.rtp.gateway.bot.update.provider.ActionProvider;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
+import com.github.nnbros.rtp.gateway.exception.UnknownMessageException;
 import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
 import com.github.nnbros.rtp.gateway.model.Events;
 import com.github.nnbros.rtp.gateway.model.States;
@@ -20,6 +21,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.EnumMap;
 import java.util.function.Function;
 
+import static com.github.nnbros.rtp.gateway.util.ActionError.ERROR_NOT_ALLOWED;
 import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
 
 @Slf4j
@@ -68,11 +70,14 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 
 				log.info("The update has been processed successfully, accepted = {}", accepted);
 				if (!accepted) {
-					throw new UpdateRuntimeException("Команда не может быть обработана. Попробуйте выполнить другое действие", action.userId());
+					String callbackQueryId = update.hasCallbackQuery() ? update.getCallbackQuery().getId() : null;
+					throw new UpdateRuntimeException(ERROR_NOT_ALLOWED.getText(), callbackQueryId, action.userId());
 				}
 			}
+		} catch (UnknownMessageException ignored) {
+			lockService.releaseLock(userId);
 		} catch (UpdateRuntimeException e) {
-			errorProcessor.process(userId, e.getMessage());
+			errorProcessor.process(userId, e.getCallbackQueryId(), e.getMessage());
 		} catch (Exception e) {
 			//TODO add retry logic and updates validation
 			lockService.releaseLock(userId);
