@@ -1,8 +1,14 @@
 package com.github.nnbros.rtp.gateway.configuration;
 
+import com.github.nnbros.rtp.gateway.bot.statemachine.ErrorAction;
+import com.github.nnbros.rtp.gateway.bot.statemachine.RegistrationAction;
+import com.github.nnbros.rtp.gateway.bot.update.ActionRouter;
+import com.github.nnbros.rtp.gateway.bot.update.processor.GatewayTelegramClient;
 import com.github.nnbros.rtp.gateway.model.Events;
 import com.github.nnbros.rtp.gateway.model.States;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.context.annotation.Bean;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
@@ -12,6 +18,7 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import org.springframework.stereotype.Component;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import static com.github.nnbros.rtp.gateway.model.Events.*;
 import static com.github.nnbros.rtp.gateway.model.States.*;
@@ -20,8 +27,8 @@ import static com.github.nnbros.rtp.gateway.model.States.*;
 @EnableStateMachine
 @RequiredArgsConstructor
 public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter<States, Events> {
-	private final Action<States, Events> registrationEventAction;
-	private final Action<States, Events> errorEventAction;
+	private final ActionRouter actionRouter;
+	private final GatewayTelegramClient errorProcessor;
 
 	@Override
 	public void configure(StateMachineConfigurationConfigurer<States, Events> config)
@@ -42,49 +49,42 @@ public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter
 	}
 
 	@Override
-	public void configure(final StateMachineTransitionConfigurer<States, Events> transitions) throws Exception {
-		transitions
-				.withExternal()
-				.source(NEW)
-				.target(START_REGISTRATION)
-				.event(storyteller_create_char_start)
-				.action(registrationEventAction, errorEventAction)
-
-				.and()
-				.withExternal()
-				.source(START_REGISTRATION)
-				.target(REGISTRATION_IN_PROGRESS)
-				.event(storyteller_create_char_gender)
-				.action(registrationEventAction, errorEventAction)
-
-				.and()
-				.withExternal()
-				.source(REGISTRATION_IN_PROGRESS)
-				.target(REGISTRATION_IN_PROGRESS)
-				.event(storyteller_create_char_name)
-				.action(registrationEventAction, errorEventAction)
-
-				.and()
-				.withExternal()
-				.source(REGISTRATION_IN_PROGRESS)
-				.target(REGISTRATION_IN_PROGRESS)
-				.event(storyteller_create_char_class_selection)
-				.action(registrationEventAction, errorEventAction)
-
-				.and()
-				.withExternal()
-				.source(REGISTRATION_IN_PROGRESS)
-				.target(REGISTRATION_IN_PROGRESS)
-				.event(storyteller_create_char_class_confirmation)
-				.action(registrationEventAction, errorEventAction)
-
-				.and()
-				.withExternal()
-				.source(REGISTRATION_IN_PROGRESS)
-				.target(REGISTRATION_COMPLETED)
-				.event(storyteller_create_char_registration)
-				.action(registrationEventAction, errorEventAction);
+	public void configure(final StateMachineTransitionConfigurer<States, Events> transitions) {
+		configureTransition(transitions, NEW, START_REGISTRATION, storyteller_create_char_start);
+		configureTransition(transitions, START_REGISTRATION, REGISTRATION_IN_PROGRESS, storyteller_create_char_gender);
+		configureTransition(transitions, REGISTRATION_IN_PROGRESS, REGISTRATION_IN_PROGRESS,
+				List.of(storyteller_create_char_start, storyteller_create_char_gender, storyteller_create_char_name, storyteller_create_char_class_selection, storyteller_create_char_class_confirmation));
+		configureTransition(transitions, REGISTRATION_IN_PROGRESS, REGISTRATION_COMPLETED, storyteller_create_char_registration);
 	}
 
+	private void configureTransition(StateMachineTransitionConfigurer<States, Events> transitions,
+									 States source,
+									 States target,
+									 List<Events> events) {
+		events.forEach(event -> configureTransition(transitions, source, target, event));
+	}
 
+	@SneakyThrows
+
+	private void configureTransition(StateMachineTransitionConfigurer<States, Events> transitions,
+									 States source,
+									 States target,
+									 Events event) {
+		transitions
+				.withExternal()
+				.source(source)
+				.target(target)
+				.event(event)
+				.action(registrationEventAction(actionRouter), errorEventAction(errorProcessor));
+	}
+
+	@Bean
+	public Action<States, Events> registrationEventAction(ActionRouter actionRouter) {
+		return new RegistrationAction(actionRouter);
+	}
+
+	@Bean
+	public Action<States, Events> errorEventAction(GatewayTelegramClient errorProcessor) {
+		return new ErrorAction(errorProcessor);
+	}
 }

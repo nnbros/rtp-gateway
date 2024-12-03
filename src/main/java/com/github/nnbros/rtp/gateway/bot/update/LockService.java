@@ -31,18 +31,19 @@ public class LockService {
 	}
 
 	public void createLock(Long userId) {
-		log.debug("Created lock for user = {}", userId);
 		lockedUsers.put(userId, Instant.now());
+		log.debug("Created lock for user = {}", userId);
 	}
 
 	public void releaseLock(Long userId) {
-		log.debug("Released lock for user = {}", userId);
 		lockedUsers.remove(userId);
+		log.debug("Released lock for user = {}", userId);
 	}
 
 	@Scheduled(initialDelayString = "${gateway.user.lock.ttl}", fixedRateString = "${gateway.user.lock.ttl}")
 	public void releaseLocks() {
 		lockedUsers.entrySet()
 				.removeIf(entry -> Duration.between(entry.getValue(), Instant.now()).compareTo(ttl) > 0);
+		log.debug("Scheduled job for user release lock has been executed successfully");
 	}
 }

@@ -7,19 +7,8 @@ public class UpdateRuntimeException extends RuntimeException {
 	private Long userId;
 	private String callbackQueryId;
 
-	public UpdateRuntimeException() {
-	}
-
 	public UpdateRuntimeException(String message) {
 		super(message);
-	}
-
-	public UpdateRuntimeException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public UpdateRuntimeException(Throwable cause) {
-		super(cause);
 	}
 
 	public UpdateRuntimeException(String message, Long userId) {

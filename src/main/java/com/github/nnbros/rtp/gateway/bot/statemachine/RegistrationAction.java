@@ -13,11 +13,12 @@ import org.springframework.statemachine.action.Action;
 @Configuration
 @RequiredArgsConstructor
 public class RegistrationAction implements Action<States, Events> {
+	public static final String ACTION = "ACTION";
 	private final ActionRouter router;
 
 	@Override
 	public void execute(StateContext<States, Events> context) {
-		var action = context.getExtendedState().get("ACTION", com.github.nnbros.rtp.gateway.bot.update.Action.class);
+		var action = context.getExtendedState().get(ACTION, com.github.nnbros.rtp.gateway.bot.update.Action.class);
 		router.route(action);
 	}
 }

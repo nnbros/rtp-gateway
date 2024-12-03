@@ -2,7 +2,6 @@ package com.github.nnbros.rtp.gateway.bot.update;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
 import com.github.nnbros.rtp.gateway.bot.update.processor.ActionProcessor;
-import com.github.nnbros.rtp.gateway.bot.update.processor.ErrorActionProcessor;
 import com.github.nnbros.rtp.gateway.bot.update.processor.UserUpdateActionProcessor;
 import com.github.nnbros.rtp.gateway.configuration.Actions;
 import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
@@ -33,8 +32,6 @@ import static org.mockito.Mockito.*;
 class ActionRouterTest {
 	@Mock
 	private UserService userService;
-	@Mock
-	private ErrorActionProcessor errorActionProcessor;
 	@Mock
 	private UserUpdateActionProcessor userUpdateActionProcessor;
 	private ActionRouter actionRouter;

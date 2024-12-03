@@ -1,7 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot.update.processor;
 
 import com.github.nnbros.rtp.gateway.bot.MessageBuilder;
-import com.github.nnbros.rtp.gateway.bot.update.LockService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -12,15 +11,12 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ErrorActionProcessor {
-	private final LockService lockService;
+public class GatewayTelegramClient {
 	private final TelegramClient client;
 	private final MessageBuilder messageBuilder;
 
 	@SneakyThrows
-	public void process(Long userId, String callbackQueryId, String text) {
-		lockService.releaseLock(userId);
-		log.info("unlock user {}", userId);
+	public void send(Long userId, String callbackQueryId, String text) {
 		if (callbackQueryId != null) {
 			AnswerCallbackQuery answer = AnswerCallbackQuery.builder()
 					.callbackQueryId(callbackQueryId)
@@ -31,5 +27,6 @@ public class ErrorActionProcessor {
 		} else {
 			client.execute(messageBuilder.createMessage(userId, text));
 		}
+		log.info("Message was sent to user [{}] with text: {}", userId, text);
 	}
 }

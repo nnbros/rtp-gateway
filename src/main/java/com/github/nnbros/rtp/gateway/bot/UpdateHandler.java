@@ -3,7 +3,7 @@ package com.github.nnbros.rtp.gateway.bot;
 import com.github.nnbros.rtp.gateway.bot.update.Action;
 import com.github.nnbros.rtp.gateway.bot.update.LockService;
 import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
-import com.github.nnbros.rtp.gateway.bot.update.processor.ErrorActionProcessor;
+import com.github.nnbros.rtp.gateway.bot.update.processor.GatewayTelegramClient;
 import com.github.nnbros.rtp.gateway.bot.update.provider.ActionProvider;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import com.github.nnbros.rtp.gateway.exception.UnknownMessageException;
@@ -28,11 +28,13 @@ import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
 @Service
 @RequiredArgsConstructor
 public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
+
 	private final EnumMap<UpdateType, ActionProvider> actionProviders;
 	private final LockService lockService;
 	private final MessageBuilder messageBuilder;
-	private final ErrorActionProcessor errorProcessor;
+	private final GatewayTelegramClient client;
 	private final StateMachine<States, Events> stateMachine;
+	private static final String ACTION = "ACTION";
 	private static final String CHAT_ID_MDC_KEY = "chatId";
 	private static final String UPDATE_ID_MDC_KEY = "updateId";
 	public static final String UNKNOWN_UPDATE_RESPONSE_MESSAGE = "Sorry, there is no functionality implemented to process your request.";
@@ -65,24 +67,24 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 
 				Action action = actionProvider.retrieve(update);
 
-				stateMachine.getExtendedState().getVariables().put("ACTION", action);
+				stateMachine.getExtendedState().getVariables().put(ACTION, action);
 				boolean accepted = stateMachine.sendEvent(Events.valueOf(action.actionId()));
 
-				log.info("The update has been processed successfully, accepted = {}", accepted);
+				log.info("The update has been processed successfully, accepted = {}, action = {}", accepted, action.actionId());
 				if (!accepted) {
 					String callbackQueryId = update.hasCallbackQuery() ? update.getCallbackQuery().getId() : null;
 					throw new UpdateRuntimeException(ERROR_NOT_ALLOWED.getText(), callbackQueryId, action.userId());
 				}
 			}
 		} catch (UnknownMessageException ignored) {
-			lockService.releaseLock(userId);
+			log.info("Received unknown message. The message will be ignored");
 		} catch (UpdateRuntimeException e) {
-			errorProcessor.process(userId, e.getCallbackQueryId(), e.getMessage());
+			client.send(userId, e.getCallbackQueryId(), e.getMessage());
 		} catch (Exception e) {
 			//TODO add retry logic and updates validation
-			lockService.releaseLock(userId);
 			throw new GatewayRuntimeException("Failed to process update %s".formatted(updateId), e);
 		} finally {
+			lockService.releaseLock(userId);
 			MDC.clear();
 		}
 		return null;
