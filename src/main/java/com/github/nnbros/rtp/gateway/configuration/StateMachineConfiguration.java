@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.statemachine.action.Action;
-import org.springframework.statemachine.config.EnableStateMachine;
+import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
@@ -24,7 +24,7 @@ import static com.github.nnbros.rtp.gateway.model.Events.*;
 import static com.github.nnbros.rtp.gateway.model.States.*;
 
 @Component
-@EnableStateMachine
+@EnableStateMachineFactory
 @RequiredArgsConstructor
 public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter<States, Events> {
 	private final ActionRouter actionRouter;
@@ -53,7 +53,7 @@ public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter
 		configureTransition(transitions, NEW, START_REGISTRATION, storyteller_create_char_start);
 		configureTransition(transitions, START_REGISTRATION, REGISTRATION_IN_PROGRESS, storyteller_create_char_gender);
 		configureTransition(transitions, REGISTRATION_IN_PROGRESS, REGISTRATION_IN_PROGRESS,
-				List.of(storyteller_create_char_start, storyteller_create_char_gender, storyteller_create_char_name, storyteller_create_char_class_selection, storyteller_create_char_class_confirmation));
+				List.of(storyteller_create_char_start, storyteller_create_char_name, storyteller_create_char_class_selection, storyteller_create_char_class_confirmation));
 		configureTransition(transitions, REGISTRATION_IN_PROGRESS, REGISTRATION_COMPLETED, storyteller_create_char_registration);
 	}
 

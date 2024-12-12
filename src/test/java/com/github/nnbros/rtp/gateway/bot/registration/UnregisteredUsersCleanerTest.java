@@ -1,5 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot.registration;
 
+import com.github.nnbros.rtp.gateway.bot.statemachine.StateMachineService;
 import com.github.nnbros.rtp.gateway.client.StorytellerServiceClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,8 @@ class UnregisteredUsersCleanerTest {
 	private UserService userService;
 	@Mock
 	private StorytellerServiceClient storytellerServiceClient;
+	@Mock
+	private StateMachineService stateMachineService;
 	@InjectMocks
 	private UnregisteredUsersCleaner unregisteredUsersCleaner;
 

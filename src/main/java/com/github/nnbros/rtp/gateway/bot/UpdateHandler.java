@@ -1,5 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot;
 
+import com.github.nnbros.rtp.gateway.bot.statemachine.StateMachineService;
 import com.github.nnbros.rtp.gateway.bot.update.Action;
 import com.github.nnbros.rtp.gateway.bot.update.LockService;
 import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
@@ -33,7 +34,7 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 	private final LockService lockService;
 	private final MessageBuilder messageBuilder;
 	private final GatewayTelegramClient client;
-	private final StateMachine<States, Events> stateMachine;
+	private final StateMachineService stateMachineService;
 	private static final String ACTION = "ACTION";
 	private static final String CHAT_ID_MDC_KEY = "chatId";
 	private static final String UPDATE_ID_MDC_KEY = "updateId";
@@ -66,7 +67,7 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 				lockService.createLock(userId);
 
 				Action action = actionProvider.retrieve(update);
-
+				StateMachine<States, Events> stateMachine = stateMachineService.getStateMachineForUser(userId.toString());
 				stateMachine.getExtendedState().getVariables().put(ACTION, action);
 				boolean accepted = stateMachine.sendEvent(Events.valueOf(action.actionId()));
 
@@ -77,14 +78,16 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 				}
 			}
 		} catch (UnknownMessageException ignored) {
+			lockService.releaseLock(userId);
 			log.info("Received unknown message. The message will be ignored");
 		} catch (UpdateRuntimeException e) {
+			lockService.releaseLock(userId);
 			client.send(userId, e.getCallbackQueryId(), e.getMessage());
 		} catch (Exception e) {
+			lockService.releaseLock(userId);
 			//TODO add retry logic and updates validation
 			throw new GatewayRuntimeException("Failed to process update %s".formatted(updateId), e);
 		} finally {
-			lockService.releaseLock(userId);
 			MDC.clear();
 		}
 		return null;
