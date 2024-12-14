@@ -20,8 +20,10 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.Function;
 
+import static com.github.nnbros.rtp.gateway.bot.statemachine.ErrorAction.ERROR_PROCESSED_FLAG;
 import static com.github.nnbros.rtp.gateway.util.ActionError.ERROR_NOT_ALLOWED;
 import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
 
@@ -68,11 +70,13 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 
 				Action action = actionProvider.retrieve(update);
 				StateMachine<States, Events> stateMachine = stateMachineService.getStateMachineForUser(userId.toString());
-				stateMachine.getExtendedState().getVariables().put(ACTION, action);
+				Map<Object, Object> variables = stateMachine.getExtendedState().getVariables();
+				variables.put(ACTION, action);
+				variables.put(ERROR_PROCESSED_FLAG, false);
 				boolean accepted = stateMachine.sendEvent(Events.valueOf(action.actionId()));
 
 				log.info("The update has been processed successfully, accepted = {}, action = {}", accepted, action.actionId());
-				if (!accepted) {
+				if (!accepted && !stateMachine.getExtendedState().get(ERROR_PROCESSED_FLAG, Boolean.class)) {
 					String callbackQueryId = update.hasCallbackQuery() ? update.getCallbackQuery().getId() : null;
 					throw new UpdateRuntimeException(ERROR_NOT_ALLOWED.getText(), callbackQueryId, action.userId());
 				}
