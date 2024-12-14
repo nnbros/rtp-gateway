@@ -1,6 +1,7 @@
 package com.github.nnbros.rtp.gateway.bot;
 
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
+import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
 import com.github.nnbros.rtp.gateway.util.ActionError;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,14 @@ public enum Command {
 				throw new GatewayRuntimeException("Unable to parse command, message text is empty");
 			}
 			String commandText = message.getText().replaceFirst(COMMAND_PREFIX, "");
-			return Command.valueOf(commandText.toUpperCase());
+			Command command = Command.valueOf(commandText.toUpperCase());
+			if (command == START) {
+				return command;
+			} else {
+				throw new UpdateRuntimeException(command.getCommandResponse(), message.getFrom().getId());
+			}
 		} catch (IllegalArgumentException e) {
-			return Command.UNKNOWN;
+			throw new UpdateRuntimeException(Command.UNKNOWN.getCommandResponse(), message.getFrom().getId());
 		}
 	}
 }

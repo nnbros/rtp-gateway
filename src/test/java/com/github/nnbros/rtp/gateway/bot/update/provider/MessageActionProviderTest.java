@@ -2,7 +2,7 @@ package com.github.nnbros.rtp.gateway.bot.update.provider;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
 import com.github.nnbros.rtp.gateway.bot.update.Action;
-import com.github.nnbros.rtp.gateway.util.ActionError;
+import com.github.nnbros.rtp.gateway.exception.UnknownMessageException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,10 +40,7 @@ class MessageActionProviderTest {
 	@Test
 	void checkUnknownAction() {
 		Update update = createTestEditedMessageUpdate();
-		Action actual = provider.retrieve(update);
-		Action expected = new Action(ActionError.ERROR_UNKNOWN.name(), ActionError.ERROR_UNKNOWN.getText(), update, TEST_USER_ID);
-
-		assertEquals(expected, actual);
+		assertThrows(UnknownMessageException.class, () -> provider.retrieve(update));
 	}
 
 	@ParameterizedTest
@@ -56,16 +53,28 @@ class MessageActionProviderTest {
 		assertEquals(expected, actual);
 	}
 
+	@ParameterizedTest
+	@MethodSource("lastActionsException")
+	void checkActionException(String actionId) {
+		Update update = createTestMessageUpdate();
+		Mockito.when(userService.getLastAction(TEST_USER_ID)).thenReturn(Optional.of(actionId));
+
+		assertThrows(UnknownMessageException.class, () -> provider.retrieve(update));
+	}
+
 	private static Stream<Arguments> lastActions() {
 		return Stream.of(
-				Arguments.of("blablabla", new Action(ActionError.ERROR_UNKNOWN.name(),
-						ActionError.ERROR_UNKNOWN.getText(), createTestMessageUpdate(), TEST_USER_ID)),
-				Arguments.of(STORYTELLER_CREATE_CHAR_START, new Action(ActionError.ERROR_UNKNOWN.name(),
-						ActionError.ERROR_UNKNOWN.getText(), createTestMessageUpdate(), TEST_USER_ID)),
 				Arguments.of(STORYTELLER_CREATE_CHAR_GENDER, new Action(STORYTELLER_CREATE_CHAR_NAME,
 						null, createTestMessageUpdate(), TEST_USER_ID)),
 				Arguments.of(STORYTELLER_CREATE_CHAR_NAME, new Action(STORYTELLER_CREATE_CHAR_NAME,
 						null, createTestMessageUpdate(), TEST_USER_ID))
+		);
+	}
+
+	private static Stream<Arguments> lastActionsException() {
+		return Stream.of(
+				Arguments.of("blablabla"),
+				Arguments.of(STORYTELLER_CREATE_CHAR_START)
 		);
 	}
 }

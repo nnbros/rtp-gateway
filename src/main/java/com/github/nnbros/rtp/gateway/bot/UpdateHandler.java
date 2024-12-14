@@ -1,18 +1,30 @@
 package com.github.nnbros.rtp.gateway.bot;
 
-import com.github.nnbros.rtp.gateway.bot.update.*;
+import com.github.nnbros.rtp.gateway.bot.statemachine.StateMachineService;
+import com.github.nnbros.rtp.gateway.bot.update.Action;
+import com.github.nnbros.rtp.gateway.bot.update.LockService;
+import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
+import com.github.nnbros.rtp.gateway.bot.update.processor.GatewayTelegramClient;
 import com.github.nnbros.rtp.gateway.bot.update.provider.ActionProvider;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
+import com.github.nnbros.rtp.gateway.exception.UnknownMessageException;
+import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
+import com.github.nnbros.rtp.gateway.model.Events;
+import com.github.nnbros.rtp.gateway.model.States;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.Function;
 
+import static com.github.nnbros.rtp.gateway.bot.statemachine.ErrorAction.ERROR_PROCESSED_FLAG;
+import static com.github.nnbros.rtp.gateway.util.ActionError.ERROR_NOT_ALLOWED;
 import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
 
 @Slf4j
@@ -20,10 +32,12 @@ import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
 @RequiredArgsConstructor
 public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 
-	private final ActionRouter actionRouter;
 	private final EnumMap<UpdateType, ActionProvider> actionProviders;
 	private final LockService lockService;
 	private final MessageBuilder messageBuilder;
+	private final GatewayTelegramClient client;
+	private final StateMachineService stateMachineService;
+	private static final String ACTION = "ACTION";
 	private static final String CHAT_ID_MDC_KEY = "chatId";
 	private static final String UPDATE_ID_MDC_KEY = "updateId";
 	public static final String UNKNOWN_UPDATE_RESPONSE_MESSAGE = "Sorry, there is no functionality implemented to process your request.";
@@ -51,22 +65,35 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 			}
 			if (lockService.isLocked(userId)) {
 				log.warn("There is an action in progress for user {} , received update {} won't be processed", userId, updateId);
-				return null;
 			} else {
 				lockService.createLock(userId);
 
 				Action action = actionProvider.retrieve(update);
-				actionRouter.route(action);
+				StateMachine<States, Events> stateMachine = stateMachineService.getStateMachineForUser(userId.toString());
+				Map<Object, Object> variables = stateMachine.getExtendedState().getVariables();
+				variables.put(ACTION, action);
+				variables.put(ERROR_PROCESSED_FLAG, false);
+				boolean accepted = stateMachine.sendEvent(Events.valueOf(action.actionId()));
 
-				log.info("The update has been processed successfully");
+				log.info("The update has been processed successfully, accepted = {}, action = {}", accepted, action.actionId());
+				if (!accepted && !stateMachine.getExtendedState().get(ERROR_PROCESSED_FLAG, Boolean.class)) {
+					String callbackQueryId = update.hasCallbackQuery() ? update.getCallbackQuery().getId() : null;
+					throw new UpdateRuntimeException(ERROR_NOT_ALLOWED.getText(), callbackQueryId, action.userId());
+				}
 			}
-			return null;
-		} catch (Exception e) {
-			//TODO add retry logic and updates validation
+		} catch (UnknownMessageException ignored) {
 			lockService.releaseLock(userId);
+			log.info("Received unknown message. The message will be ignored");
+		} catch (UpdateRuntimeException e) {
+			lockService.releaseLock(userId);
+			client.send(userId, e.getCallbackQueryId(), e.getMessage());
+		} catch (Exception e) {
+			lockService.releaseLock(userId);
+			//TODO add retry logic and updates validation
 			throw new GatewayRuntimeException("Failed to process update %s".formatted(updateId), e);
 		} finally {
 			MDC.clear();
 		}
+		return null;
 	}
 }

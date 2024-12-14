@@ -2,7 +2,7 @@ package com.github.nnbros.rtp.gateway.bot.update.provider;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
 import com.github.nnbros.rtp.gateway.bot.update.Action;
-import com.github.nnbros.rtp.gateway.util.ActionError;
+import com.github.nnbros.rtp.gateway.exception.UnknownMessageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -27,7 +27,7 @@ public class MessageActionProvider implements ActionProvider {
 
 		return userService.getLastAction(userId)
 				.filter(lastAction -> Set.of(STORYTELLER_CREATE_CHAR_GENDER, STORYTELLER_CREATE_CHAR_NAME).contains(lastAction))
-				.map(s ->  new Action(STORYTELLER_CREATE_CHAR_NAME, null, update, userId))
-				.orElse(new Action(ActionError.ERROR_UNKNOWN.name(), ActionError.ERROR_UNKNOWN.getText(), update, userId));
+				.map(s -> new Action(STORYTELLER_CREATE_CHAR_NAME, null, update, userId))
+				.orElseThrow(UnknownMessageException::new);
 	}
 }

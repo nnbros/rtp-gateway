@@ -1,8 +1,8 @@
 package com.github.nnbros.rtp.gateway.bot.update.provider;
 
 import com.github.nnbros.rtp.gateway.bot.Command;
-import com.github.nnbros.rtp.gateway.bot.update.Action;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
+import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,10 +25,10 @@ class CommandActionProviderTest {
 
 	@ParameterizedTest
 	@MethodSource("updates")
-	public void checkAction(Update update, Action expected) {
-		Action actual = provider.retrieve(update);
-
-		assertEquals(expected, actual);
+	public void checkAction(Update update, String expected) {
+		UpdateRuntimeException exception = assertThrows(UpdateRuntimeException.class, () ->
+				provider.retrieve(update));
+		assertEquals(expected, exception.getMessage());
 	}
 
 	@Test
@@ -45,14 +45,9 @@ class CommandActionProviderTest {
 
 	private static Stream<Arguments> updates() {
 		return Stream.of(
-				Arguments.of(createTestCommandUpdate(Command.HELP), new Action(Command.HELP.getAction(),
-						Command.HELP.getCommandResponse(), createTestCommandUpdate(Command.HELP), TEST_USER_ID)),
-				Arguments.of(createTestEditedCommandUpdate(Command.HELP), new Action(Command.HELP.getAction(),
-						Command.HELP.getCommandResponse(), createTestEditedCommandUpdate(Command.HELP), TEST_USER_ID)),
-				Arguments.of(createTestCommandUpdate(Command.START), new Action(Command.START.getAction(),
-						Command.START.getCommandResponse(), createTestCommandUpdate(Command.START), TEST_USER_ID)),
-				Arguments.of(createTestCommandUpdate(Command.UNKNOWN), new Action(Command.UNKNOWN.getAction(),
-						Command.UNKNOWN.getCommandResponse(), createTestCommandUpdate(Command.UNKNOWN), TEST_USER_ID))
+				Arguments.of(createTestCommandUpdate(Command.HELP), Command.HELP.getCommandResponse()),
+				Arguments.of(createTestEditedCommandUpdate(Command.HELP), Command.HELP.getCommandResponse()),
+				Arguments.of(createTestCommandUpdate(Command.UNKNOWN), Command.UNKNOWN.getCommandResponse())
 		);
 	}
 }
