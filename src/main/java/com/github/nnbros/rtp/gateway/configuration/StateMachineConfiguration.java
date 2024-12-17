@@ -55,6 +55,13 @@ public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter
 		configureTransition(transitions, REGISTRATION_IN_PROGRESS, REGISTRATION_IN_PROGRESS,
 				List.of(storyteller_create_char_start, storyteller_create_char_gender, storyteller_create_char_name, storyteller_create_char_class_selection, storyteller_create_char_class_confirmation));
 		configureTransition(transitions, REGISTRATION_IN_PROGRESS, REGISTRATION_COMPLETED, storyteller_create_char_registration);
+		configureTransition(transitions, REGISTRATION_COMPLETED, REGISTRATION_COMPLETED,
+				List.of(storyteller_main_menu_monster_hunt,
+						storyteller_main_menu_character,
+						storyteller_main_menu_character_details,
+						storyteller_main_menu_character_deck_builder,
+						storyteller_main_menu));
+		//todo break the statemachine status here
 	}
 
 	private void configureTransition(StateMachineTransitionConfigurer<States, Events> transitions,

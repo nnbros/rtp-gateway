@@ -6,6 +6,11 @@ actions:
         storyteller_create_char_class_selection: STORYTELLER, USER_UPDATER
         storyteller_create_char_class_confirmation: STORYTELLER, USER_UPDATER
         storyteller_create_char_registration: STORYTELLER, USER_UPDATER, REGISTRAR
+        storyteller_main_menu_monster_hunt: STORYTELLER, USER_UPDATER
+        storyteller_main_menu_character: STORYTELLER, USER_UPDATER
+        storyteller_main_menu_character_details: STORYTELLER, USER_UPDATER
+        storyteller_main_menu_character_deck_builder: STORYTELLER, USER_UPDATER
+        storyteller_main_menu: STORYTELLER, USER_UPDATER
     allowed_for_unregistered_users:
     - storyteller_create_char_start
     - storyteller_create_char_gender

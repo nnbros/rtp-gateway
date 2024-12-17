@@ -1,0 +1,7 @@
+messages:
+    mapping:
+        storyteller_main_menu_monster_hunt: "Охота на монстров"
+        storyteller_main_menu_character: "Персонаж"
+        storyteller_main_menu_character_details: "Характеристики"
+        storyteller_main_menu_character_deck_builder: "Умения"
+        storyteller_main_menu: "Назад"

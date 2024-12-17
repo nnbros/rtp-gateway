@@ -5,6 +5,7 @@ public enum ActionProcessorType {
 	REGISTRAR,
 	DEFAULT,
 	USER_UPDATER,
+	USER_VALIDATOR,
 	PVE,
 	PVP
 }

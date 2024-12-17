@@ -1,7 +1,9 @@
 package com.github.nnbros.rtp.gateway.configuration;
 
-import com.github.nnbros.rtp.gateway.bot.update.*;
+import com.github.nnbros.rtp.gateway.bot.registration.UserService;
+import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
 import com.github.nnbros.rtp.gateway.bot.update.processor.ActionProcessor;
+import com.github.nnbros.rtp.gateway.bot.update.processor.UserValidationProcessor;
 import com.github.nnbros.rtp.gateway.bot.update.provider.ActionProvider;
 import com.github.nnbros.rtp.gateway.bot.update.provider.CallbackQueryActionProvider;
 import com.github.nnbros.rtp.gateway.bot.update.provider.CommandActionProvider;
@@ -19,7 +21,7 @@ import static com.github.nnbros.rtp.gateway.bot.update.UpdateType.*;
 
 @Configuration
 @EnableScheduling
-@EnableConfigurationProperties({GatewayProperties.class, Actions.class})
+@EnableConfigurationProperties({GatewayProperties.class, Actions.class, Messages.class})
 public class GatewayConfiguration {
 	@Bean
 	public EnumMap<UpdateType, ActionProvider> updateServiceMap(CallbackQueryActionProvider actionService,
@@ -34,8 +36,11 @@ public class GatewayConfiguration {
 	}
 
 	@Bean
-	public Map<String, List<ActionProcessor>> actionProcessors(Actions actions, Collection<ActionProcessor> processors) {
+	public Map<String, List<ActionProcessor>> actionProcessors(Actions actions,
+															   Collection<ActionProcessor> processors,
+															   UserService userService) {
 		TreeSet<ActionProcessor> sortedProcessors = new TreeSet<>(processors);
+		sortedProcessors.add(new UserValidationProcessor(userService, actions));
 		return actions.getMapping()
 				.entrySet()
 				.stream()
