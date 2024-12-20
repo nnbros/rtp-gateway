@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -36,6 +37,7 @@ public class UserService {
 						.map(User::getLastAction));
 	}
 
+	@Transactional
 	public void updateLastAction(Long userId, String lastAction) {
 		log.debug("Last action updated to {} for user id = {}", userId, lastAction);
 		if (exists(userId)) {

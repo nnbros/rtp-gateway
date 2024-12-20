@@ -44,7 +44,7 @@ public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter
 		states
 				.withStates()
 				.initial(NEW)
-				.end(REGISTRATION_COMPLETED)
+				.end(END)
 				.states(EnumSet.allOf(States.class));
 	}
 
