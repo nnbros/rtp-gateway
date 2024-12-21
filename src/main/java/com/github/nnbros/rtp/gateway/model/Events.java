@@ -6,5 +6,10 @@ public enum Events {
 	storyteller_create_char_name,
 	storyteller_create_char_class_selection,
 	storyteller_create_char_class_confirmation,
-	storyteller_create_char_registration
+	storyteller_create_char_registration,
+	storyteller_main_menu_monster_hunt,
+	storyteller_main_menu_character,
+	storyteller_main_menu_character_details,
+	storyteller_main_menu_character_deck_builder,
+	storyteller_main_menu
 }

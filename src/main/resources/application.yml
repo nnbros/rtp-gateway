@@ -5,7 +5,9 @@ spring:
     application:
         name: gateway
     config:
-        import: classpath:/configuration/actions_mapping.yml
+        import:
+            - classpath:/configuration/actions_mapping.yml
+            - classpath:/configuration/RU_message_mapping.yml
     output:
         ansi:
             enabled: ALWAYS

@@ -40,20 +40,12 @@ public class ActionRouter {
 		String actionId = action.actionId();
 		Long userId = action.userId();
 		log.info("Routing action = {}, from user = {}", actionId, userId);
-		if (actionProcessors.containsKey(actionId)) {
-			if (!allowedActionsForUnregisteredUsers.contains(actionId)) {
-				throw new UpdateRuntimeException(ActionError.ERROR_NOT_ALLOWED.getText());
-			}
-		} else {
+		if (!actionProcessors.containsKey(actionId)) {
 			if (ActionError.names().contains(actionId)) {
 				throw new UpdateRuntimeException(action.data());
 			} else {
 				throw new UpdateRuntimeException(ActionError.ERROR_UNKNOWN.getText());
 			}
-		}
-		// todo review after other actions implemented
-		if (userService.exists(userId)) {
-			throw new UpdateRuntimeException(ActionError.ERROR_USER_ALREADY_REGISTERED.getText());
 		}
 	}
 }
