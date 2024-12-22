@@ -1,0 +1,21 @@
+name: CI\CD with Jenkins
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: 
+      - closed
+    branches: [ "master" ]
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run Jenkins Job
+      uses: appleboy/jenkins-action@master
+      with:
+        url: "https://jenkins.nntu.ru"
+        user: "github"
+        token: ${{ secrets.GITTOKENJENKINS }}
+        job: "rtp-bot-gateway-ci-cd-ver-inc"
