@@ -1,6 +1,5 @@
 package com.github.nnbros.rtp.gateway.bot;
 
-import com.github.nnbros.rtp.gateway.bot.statemachine.StateMachineService;
 import com.github.nnbros.rtp.gateway.bot.update.Action;
 import com.github.nnbros.rtp.gateway.bot.update.LockService;
 import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
@@ -15,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.service.StateMachineService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -31,12 +31,11 @@ import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
 @Service
 @RequiredArgsConstructor
 public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
-
 	private final EnumMap<UpdateType, ActionProvider> actionProviders;
 	private final LockService lockService;
 	private final MessageBuilder messageBuilder;
 	private final GatewayTelegramClient client;
-	private final StateMachineService stateMachineService;
+	private final StateMachineService<States, Events> stateMachineService;
 	private static final String ACTION = "ACTION";
 	private static final String CHAT_ID_MDC_KEY = "chatId";
 	private static final String UPDATE_ID_MDC_KEY = "updateId";
@@ -69,16 +68,16 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 				lockService.createLock(userId);
 
 				Action action = actionProvider.retrieve(update);
-				StateMachine<States, Events> stateMachine = stateMachineService.getStateMachineForUser(userId.toString());
+				StateMachine<States, Events> stateMachine = stateMachineService.acquireStateMachine(userId.toString());
 				Map<Object, Object> variables = stateMachine.getExtendedState().getVariables();
 				variables.put(ACTION, action);
 				variables.put(ERROR_PROCESSED_FLAG, false);
-				boolean accepted = stateMachine.sendEvent(Events.valueOf(action.actionId()));
+				boolean accepted = stateMachine.sendEvent(Events.valueOf(action.getActionId()));
 
-				log.info("The update has been processed successfully, accepted = {}, action = {}", accepted, action.actionId());
+				log.info("The update has been processed successfully, accepted = {}, action = {}", accepted, action.getActionId());
 				if (!accepted && !stateMachine.getExtendedState().get(ERROR_PROCESSED_FLAG, Boolean.class)) {
 					String callbackQueryId = update.hasCallbackQuery() ? update.getCallbackQuery().getId() : null;
-					throw new UpdateRuntimeException(ERROR_NOT_ALLOWED.getText(), callbackQueryId, action.userId());
+					throw new UpdateRuntimeException(ERROR_NOT_ALLOWED.getText(), callbackQueryId, action.getUserId());
 				}
 			}
 		} catch (UnknownMessageException ignored) {

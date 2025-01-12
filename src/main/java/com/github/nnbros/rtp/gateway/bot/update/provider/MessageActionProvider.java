@@ -29,12 +29,12 @@ public class MessageActionProvider implements ActionProvider {
 		Long userId = message.getFrom().getId();
 		if (userService.exists(userId)) {
 			return Optional.ofNullable(messages.getMapping().get(message.getText()))
-					.map(s -> new Action(s, null, update, userId))
+					.map(s -> new Action(s, null, userId, update))
 					.orElseThrow(UnknownMessageException::new);
 		} else {
 			return userService.getLastAction(userId)
 					.filter(lastAction -> Set.of(STORYTELLER_CREATE_CHAR_GENDER, STORYTELLER_CREATE_CHAR_NAME).contains(lastAction))
-					.map(s -> new Action(STORYTELLER_CREATE_CHAR_NAME, null, update, userId))
+					.map(s -> new Action(STORYTELLER_CREATE_CHAR_NAME, null, userId, update))
 					.orElseThrow(UnknownMessageException::new);
 		}
 	}

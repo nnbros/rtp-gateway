@@ -27,6 +27,6 @@ public class CommandActionProvider implements ActionProvider {
 
 		Command command = parseCommand(message);
 		log.debug("Starting to process command [{}]", command);
-		return new Action(command.getAction(), command.getCommandResponse(), update, message.getFrom().getId());
+		return new Action(command.getAction(), command.getCommandResponse(), message.getFrom().getId(), update);
 	}
 }

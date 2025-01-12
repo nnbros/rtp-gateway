@@ -36,13 +36,13 @@ class CallbackQueryActionProviderTest {
 	private static Stream<Arguments> lastActions() {
 		return Stream.of(
 				Arguments.of(STORYTELLER_CREATE_CHAR_START, new Action(STORYTELLER_CREATE_CHAR_START,
-						null, createTestCallbackQueryUpdate(STORYTELLER_CREATE_CHAR_START), TEST_USER_ID)),
+						null, TEST_USER_ID, createTestCallbackQueryUpdate(STORYTELLER_CREATE_CHAR_START))),
 				Arguments.of(STORYTELLER_CREATE_CHAR_CANCEL, new Action(STORYTELLER_CREATE_CHAR_START,
-						null, createTestCallbackQueryUpdate(STORYTELLER_CREATE_CHAR_CANCEL), TEST_USER_ID)),
+						null, TEST_USER_ID, createTestCallbackQueryUpdate(STORYTELLER_CREATE_CHAR_CANCEL))),
 				Arguments.of(STORYTELLER_CREATE_CHAR_GENDER + ":female", new Action(STORYTELLER_CREATE_CHAR_GENDER,
-						"female", createTestCallbackQueryUpdate(STORYTELLER_CREATE_CHAR_GENDER + ":female"), TEST_USER_ID)),
+						"female", TEST_USER_ID, createTestCallbackQueryUpdate(STORYTELLER_CREATE_CHAR_GENDER + ":female"))),
 				Arguments.of(STORYTELLER_CREATE_CHAR_NAME + ":", new Action(STORYTELLER_CREATE_CHAR_NAME,
-						null, createTestCallbackQueryUpdate(STORYTELLER_CREATE_CHAR_NAME), TEST_USER_ID))
+						null, TEST_USER_ID, createTestCallbackQueryUpdate(STORYTELLER_CREATE_CHAR_NAME)))
 		);
 	}
 }

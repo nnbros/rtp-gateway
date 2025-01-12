@@ -30,6 +30,6 @@ public class CallbackQueryActionProvider implements ActionProvider {
 		if (STORYTELLER_CREATE_CHAR_CANCEL.equalsIgnoreCase(actionId)) {
 			actionId = STORYTELLER_CREATE_CHAR_START;
 		}
-		return new Action(actionId, data, update, callbackQuery.getFrom().getId());
+		return new Action(actionId, data, callbackQuery.getFrom().getId(), update);
 	}
 }

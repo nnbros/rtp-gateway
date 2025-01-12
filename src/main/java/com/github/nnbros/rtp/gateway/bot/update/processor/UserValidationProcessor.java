@@ -17,11 +17,11 @@ public class UserValidationProcessor implements ActionProcessor {
 
 	@Override
 	public void process(Action action) {
-		if (actions.getAllowedForUnregisteredUsers().contains(action.actionId())) {
-			if (userService.exists(action.userId())) {
+		if (actions.getAllowedForUnregisteredUsers().contains(action.getActionId())) {
+			if (userService.exists(action.getUserId())) {
 				throw new UpdateRuntimeException(ActionError.ERROR_USER_ALREADY_REGISTERED.getText());
 			}
-		} else if (!userService.exists(action.userId())) {
+		} else if (!userService.exists(action.getUserId())) {
 			throw new UpdateRuntimeException(ActionError.ERROR_USER_NOT_REGISTERED.getText());
 		}
 

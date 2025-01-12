@@ -27,12 +27,12 @@ public class ErrorAction implements Action<States, Events> {
 	public void execute(StateContext<States, Events> context) {
 		ExtendedState extendedState = context.getExtendedState();
 		var action = extendedState.get(ACTION, com.github.nnbros.rtp.gateway.bot.update.Action.class);
-		Long userId = action.userId();
+		Long userId = action.getUserId();
 		Exception exception = context.getException();
 		String errorText = getErrorText(exception);
 		extendedState.getVariables().put(ERROR_PROCESSED_FLAG, true);
 		lockService.releaseLock(userId);
-		log.warn("Send error after action failed: {}, {}", action.actionId(), errorText);
+		log.warn("Send error after action failed: {}, {}", action.getActionId(), errorText);
 		client.send(userId, null, exception.getMessage());
 	}
 

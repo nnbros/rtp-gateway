@@ -17,9 +17,9 @@ public class RegisterUserActionProcessor implements ActionProcessor {
 
 	@Override
 	public void process(Action action) {
-		Update update = action.update();
+		Update update = action.getUpdate();
 		String username = getUsername(update, UpdateType.getUpdateType(update));
-		userService.create(action.userId(), username);
+		userService.create(action.getUserId(), username);
 	}
 
 	@Override

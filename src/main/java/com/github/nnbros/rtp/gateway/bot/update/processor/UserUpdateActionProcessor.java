@@ -13,7 +13,7 @@ public class UserUpdateActionProcessor implements ActionProcessor {
 
 	@Override
 	public void process(Action action) {
-		userService.updateLastAction(action.userId(), action.actionId());
+		userService.updateLastAction(action.getUserId(), action.getActionId());
 	}
 
 	@Override
