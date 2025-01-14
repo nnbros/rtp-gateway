@@ -14,7 +14,7 @@ public class StorytellerActionProcessor implements ActionProcessor {
 
 	@Override
 	public void process(Action action) {
-		storytellerServiceClient.sendAction(action.actionId(), action.data(), action.update());
+		storytellerServiceClient.sendAction(action.getActionId(), action.getData(), action.getUpdate());
 	}
 
 	@Override

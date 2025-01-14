@@ -9,13 +9,20 @@ import com.github.nnbros.rtp.gateway.model.Events;
 import com.github.nnbros.rtp.gateway.model.States;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.statemachine.StateMachinePersist;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
+import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
-import org.springframework.stereotype.Component;
+import org.springframework.statemachine.data.jpa.JpaPersistingStateMachineInterceptor;
+import org.springframework.statemachine.data.jpa.JpaStateMachineRepository;
+import org.springframework.statemachine.persist.StateMachineRuntimePersister;
+import org.springframework.statemachine.service.DefaultStateMachineService;
+import org.springframework.statemachine.service.StateMachineService;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -23,20 +30,21 @@ import java.util.List;
 import static com.github.nnbros.rtp.gateway.model.Events.*;
 import static com.github.nnbros.rtp.gateway.model.States.*;
 
-@Component
+@Configuration
 @EnableStateMachineFactory
 @RequiredArgsConstructor
 public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter<States, Events> {
 	private final ActionRouter actionRouter;
 	private final GatewayTelegramClient errorProcessor;
 	private final LockService lockService;
+	private final JpaStateMachineRepository jpaStateMachineRepository;
 
 	@Override
 	public void configure(StateMachineConfigurationConfigurer<States, Events> config)
 			throws Exception {
 		config
-				.withConfiguration()
-				.autoStartup(true);
+				.withPersistence()
+				.runtimePersister(stateMachineRuntimePersister(jpaStateMachineRepository));
 	}
 
 	@Override
@@ -94,5 +102,17 @@ public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter
 	public Action<States, Events> errorEventAction(GatewayTelegramClient errorProcessor,
 												   LockService lockService) {
 		return new ErrorAction(errorProcessor, lockService);
+	}
+
+	@Bean
+	public StateMachineRuntimePersister<States, Events, String> stateMachineRuntimePersister(
+			JpaStateMachineRepository jpaStateMachineRepository) {
+		return new JpaPersistingStateMachineInterceptor<>(jpaStateMachineRepository);
+	}
+
+	@Bean
+	public StateMachineService<States, Events> stateMachineService(StateMachineFactory<States, Events> stateMachineFactory,
+																   StateMachinePersist<States, Events, String> stateMachinePersist) {
+		return new DefaultStateMachineService<>(stateMachineFactory, stateMachinePersist);
 	}
 }

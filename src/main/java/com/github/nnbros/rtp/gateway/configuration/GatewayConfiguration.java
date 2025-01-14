@@ -9,6 +9,7 @@ import com.github.nnbros.rtp.gateway.bot.update.provider.CallbackQueryActionProv
 import com.github.nnbros.rtp.gateway.bot.update.provider.CommandActionProvider;
 import com.github.nnbros.rtp.gateway.bot.update.provider.MessageActionProvider;
 import com.github.nnbros.rtp.gateway.model.ActionProcessorType;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import static com.github.nnbros.rtp.gateway.bot.update.UpdateType.*;
 @Configuration
 @EnableScheduling
 @EnableConfigurationProperties({GatewayProperties.class, Actions.class, Messages.class})
+@EntityScan({"com.github.nnbros.rtp.gateway.*", "org.springframework.statemachine.data.*"})
 public class GatewayConfiguration {
 	@Bean
 	public EnumMap<UpdateType, ActionProvider> updateServiceMap(CallbackQueryActionProvider actionService,

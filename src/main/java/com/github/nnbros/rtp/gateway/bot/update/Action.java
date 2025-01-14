@@ -1,27 +1,23 @@
 package com.github.nnbros.rtp.gateway.bot.update;
 
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import lombok.*;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.Objects;
-
-public record Action(
-		@NonNull String actionId,
-		@Nullable String data,
-		@NonNull Update update,
-		@NonNull Long userId
-) {
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Action action = (Action) o;
-		return Objects.equals(actionId, action.actionId) && Objects.equals(data, action.data) && Objects.equals(userId, action.userId);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(actionId, data, userId);
-	}
+/**
+ * Class represents an action which was performed by user.
+ * IMPORTANT: do not transform it into Java Record because it's used for Kryo serialization during state machine context saving
+ * and Kryo cannot work with Java Record properly.
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = "update")
+public class Action {
+	private String actionId;
+	private String data;
+	private Long userId;
+	private transient Update update;
 }
+
+

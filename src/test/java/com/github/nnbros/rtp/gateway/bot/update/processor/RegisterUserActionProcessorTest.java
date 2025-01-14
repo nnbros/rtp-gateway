@@ -24,7 +24,7 @@ class RegisterUserActionProcessorTest {
 
 	@Test
 	void checkProcessOk() {
-		processor.process(new Action("ok", null, createUpdate(), TEST_USER_ID));
+		processor.process(new Action("ok", null, TEST_USER_ID, createUpdate()));
 		Mockito.verify(userService, Mockito.times(1)).create(ArgumentMatchers.anyLong(), ArgumentMatchers.anyString());
 	}
 

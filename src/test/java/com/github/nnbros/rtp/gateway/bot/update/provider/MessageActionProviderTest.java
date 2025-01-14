@@ -65,9 +65,9 @@ class MessageActionProviderTest {
 	private static Stream<Arguments> lastActions() {
 		return Stream.of(
 				Arguments.of(STORYTELLER_CREATE_CHAR_GENDER, new Action(STORYTELLER_CREATE_CHAR_NAME,
-						null, createTestMessageUpdate(), TEST_USER_ID)),
+						null, TEST_USER_ID, createTestMessageUpdate())),
 				Arguments.of(STORYTELLER_CREATE_CHAR_NAME, new Action(STORYTELLER_CREATE_CHAR_NAME,
-						null, createTestMessageUpdate(), TEST_USER_ID))
+						null, TEST_USER_ID, createTestMessageUpdate()))
 		);
 	}
 

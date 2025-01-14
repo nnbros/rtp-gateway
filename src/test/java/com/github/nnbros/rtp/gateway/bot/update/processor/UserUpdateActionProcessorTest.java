@@ -23,7 +23,7 @@ class UserUpdateActionProcessorTest {
 
 	@Test
 	void checkProcessOk() {
-		processor.process(new Action("ok", "data", Mockito.mock(Update.class), TEST_USER_ID));
+		processor.process(new Action("ok", "data", TEST_USER_ID, Mockito.mock(Update.class)));
 		Mockito.verify(userService, Mockito.times(1)).updateLastAction(anyLong(), anyString());
 	}
 }
