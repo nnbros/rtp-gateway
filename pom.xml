@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.github.nnbros.rtp</groupId>
   <artifactId>gateway</artifactId>
-  <version>0.3.0</version>
+  <version>0.4.0</version>
   <name>gateway</name>
   <description>Gateway service for Rise to Power</description>
   <properties>
