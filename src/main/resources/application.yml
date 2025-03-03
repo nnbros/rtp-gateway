@@ -19,6 +19,7 @@ spring:
         url: jdbc:postgresql://postgres:5432/rtp
         username: ${DB_USER}
         password: ${DB_PASSWORD}
+        driver-class-name: org.postgresql.Driver
         hikari:
             data-source-properties:
                 stringtype: unspecified
@@ -26,8 +27,6 @@ spring:
         hibernate:
             ddl-auto: none
         show-sql: false
-        properties:
-            hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
     liquibase:
         liquibase-schema: gateway
         change-log: liquibase/db.changelog-master.yaml

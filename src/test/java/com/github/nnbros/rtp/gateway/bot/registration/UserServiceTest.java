@@ -58,10 +58,13 @@ public class UserServiceTest {
 	}
 
 	@Test
-	void checkUsersToDelete() {
+	void checkUsersToDelete() throws InterruptedException {
 		userService.updateLastAction(TEST_USER_ID, ACTION);
 		userService.updateLastAction(124L, ACTION);
 		ReflectionTestUtils.setField(userService, "ttl", Duration.ofMillis(0));
+
+		//Do not delete sleep here! We need it to have time gap > 0 between user creation and Instance.now() statement.
+		Thread.sleep(10);
 
 		Set<Long> actual = userService.unregisteredUsersToDelete();
 		Assertions.assertEquals(Set.of(TEST_USER_ID, 124L), actual);

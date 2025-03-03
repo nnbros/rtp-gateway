@@ -18,9 +18,16 @@ logging:
 
 spring:
     datasource:
-        url: jdbc:postgresql://localhost:5432/gateway
+        hikari:
+            maximumPoolSize: 10
+            minimumIdle: 5
+            idleTimeout: 30000  # 30 sec
+            maxLifetime: 300000  # 5 min
+            keepaliveTime: 30000  # 30 sec
+            connectionTimeout: 30000  # 30 sec
+        url: jdbc:postgresql://213.177.120.46:2219/rtp
         username: gateway
-        password: gateway
+        password: rtHYqTODIJr6py7ASDnX
 
     cloud:
         openfeign:

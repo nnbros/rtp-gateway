@@ -2,7 +2,7 @@ package com.github.nnbros.rtp.gateway.bot.update;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
 import com.github.nnbros.rtp.gateway.bot.update.processor.ActionProcessor;
-import com.github.nnbros.rtp.gateway.bot.update.processor.UserUpdateActionProcessor;
+import com.github.nnbros.rtp.gateway.bot.update.processor.UserActionUpdateProcessor;
 import com.github.nnbros.rtp.gateway.configuration.Actions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class ActionRouterTest {
 	@Mock
 	private UserService userService;
 	@Mock
-	private UserUpdateActionProcessor userUpdateActionProcessor;
+	private UserActionUpdateProcessor userActionUpdateProcessor;
 	private ActionRouter actionRouter;
 	private static final String TEST_ACTION = "action";
 	private static final String OTHER_TEST_ACTION = "other_action";
@@ -34,14 +34,14 @@ class ActionRouterTest {
 		Actions actions = new Actions();
 		actions.setAllowedForUnregisteredUsers(Set.of(TEST_ACTION));
 		Map<String, List<ActionProcessor>> actionProcessors = Map.of(
-				TEST_ACTION, List.of(userUpdateActionProcessor),
-				OTHER_TEST_ACTION, List.of(userUpdateActionProcessor));
+				TEST_ACTION, List.of(userActionUpdateProcessor),
+				OTHER_TEST_ACTION, List.of(userActionUpdateProcessor));
 		actionRouter = new ActionRouter(actionProcessors);
 	}
 
 	@Test
 	void checkSuccessRoute() {
 		actionRouter.route(new Action(TEST_ACTION, null, TEST_USER_ID, mock(Update.class)));
-		verify(userUpdateActionProcessor, times(1)).process(ArgumentMatchers.any(Action.class));
+		verify(userActionUpdateProcessor, times(1)).process(ArgumentMatchers.any(Action.class));
 	}
 }
