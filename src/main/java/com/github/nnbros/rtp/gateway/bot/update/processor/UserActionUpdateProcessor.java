@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserUpdateActionProcessor implements ActionProcessor {
+public class UserActionUpdateProcessor implements ActionProcessor {
 	private final UserService userService;
 
 	@Override

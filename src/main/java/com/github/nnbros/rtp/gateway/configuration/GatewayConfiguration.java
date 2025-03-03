@@ -3,7 +3,6 @@ package com.github.nnbros.rtp.gateway.configuration;
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
 import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
 import com.github.nnbros.rtp.gateway.bot.update.processor.ActionProcessor;
-import com.github.nnbros.rtp.gateway.bot.update.processor.UserValidationProcessor;
 import com.github.nnbros.rtp.gateway.bot.update.provider.ActionProvider;
 import com.github.nnbros.rtp.gateway.bot.update.provider.CallbackQueryActionProvider;
 import com.github.nnbros.rtp.gateway.bot.update.provider.CommandActionProvider;
@@ -42,7 +41,6 @@ public class GatewayConfiguration {
 															   Collection<ActionProcessor> processors,
 															   UserService userService) {
 		TreeSet<ActionProcessor> sortedProcessors = new TreeSet<>(processors);
-		sortedProcessors.add(new UserValidationProcessor(userService, actions));
 		return actions.getMapping()
 				.entrySet()
 				.stream()

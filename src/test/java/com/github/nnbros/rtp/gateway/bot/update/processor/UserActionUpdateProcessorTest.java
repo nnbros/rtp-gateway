@@ -15,11 +15,11 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
-class UserUpdateActionProcessorTest {
+class UserActionUpdateProcessorTest {
 	@Mock
 	private UserService userService;
 	@InjectMocks
-	private UserUpdateActionProcessor processor;
+	private UserActionUpdateProcessor processor;
 
 	@Test
 	void checkProcessOk() {

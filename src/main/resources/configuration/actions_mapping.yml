@@ -1,20 +1,21 @@
 actions:
     mapping:
-        storyteller_create_char_start: STORYTELLER, USER_UPDATER
-        storyteller_create_char_gender: STORYTELLER, USER_UPDATER
-        storyteller_create_char_name: STORYTELLER, USER_UPDATER
-        storyteller_create_char_class_selection: STORYTELLER, USER_UPDATER
-        storyteller_create_char_class_confirmation: STORYTELLER, USER_UPDATER
-        storyteller_create_char_registration: STORYTELLER, USER_UPDATER, REGISTRAR
-        storyteller_main_menu_monster_hunt: STORYTELLER, USER_UPDATER
-        storyteller_main_menu_character: STORYTELLER, USER_UPDATER
-        storyteller_main_menu_character_details: STORYTELLER, USER_UPDATER
-        storyteller_main_menu_character_deck_builder: STORYTELLER, USER_UPDATER
-        storyteller_main_menu: STORYTELLER, USER_UPDATER
+        storyteller_create_char_start: STORYTELLER
+        storyteller_create_char_gender: STORYTELLER
+        storyteller_create_char_name: STORYTELLER
+        storyteller_create_char_class_selection: STORYTELLER
+        storyteller_create_char_class_confirmation: STORYTELLER
+        storyteller_create_char_registration: STORYTELLER, REGISTRAR
+        storyteller_main_menu: STORYTELLER
+        storyteller_main_menu_monster_hunt: STORYTELLER
+        storyteller_main_menu_character: STORYTELLER
+        storyteller_main_menu_character_details: STORYTELLER
+        storyteller_main_menu_character_deck_builder: STORYTELLER
+        storyteller_main_menu_character_class: STORYTELLER
     allowed_for_unregistered_users:
-    - storyteller_create_char_start
-    - storyteller_create_char_gender
-    - storyteller_create_char_name
-    - storyteller_create_char_class_selection
-    - storyteller_create_char_class_confirmation
-    - storyteller_create_char_registration
+        - storyteller_create_char_start
+        - storyteller_create_char_gender
+        - storyteller_create_char_name
+        - storyteller_create_char_class_selection
+        - storyteller_create_char_class_confirmation
+        - storyteller_create_char_registration
