@@ -19,9 +19,7 @@ pipeline {
         }
         stage('Build artifact') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'Maven-creds', passwordVariable: 'PASSWORDVAR', usernameVariable: 'USERNAMEVAR')]) {
-                    sh 'mvn clean install --settings settings.xml'
-                }
+                sh 'mvn -B install'
             }
         }
         stage('Build Docker Image') {
