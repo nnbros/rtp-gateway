@@ -69,8 +69,8 @@ jobs:
           NODE_ID: ${{ github.event.comment.node_id }}
  
   notify-job:
-    needs: [build]
-    if: ${{ always() && contains(needs.*.result, 'failure') }}	<-- check that status of the previous job
+    needs: build
+    if: ${{ always() && contains(needs.*.result, 'failure') }}
     runs-on: ubuntu-latest
     steps:
       - name: Notify on Failure
