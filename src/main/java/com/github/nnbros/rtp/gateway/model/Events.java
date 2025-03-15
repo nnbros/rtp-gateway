@@ -12,5 +12,6 @@ public enum Events {
 	storyteller_main_menu_character,
 	storyteller_main_menu_character_details,
 	storyteller_main_menu_character_deck_builder,
-	storyteller_main_menu_character_class
+	storyteller_main_menu_character_class,
+	storyteller_main_menu_army
 }
