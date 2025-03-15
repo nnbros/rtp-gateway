@@ -12,6 +12,7 @@ actions:
         storyteller_main_menu_character_details: STORYTELLER
         storyteller_main_menu_character_deck_builder: STORYTELLER
         storyteller_main_menu_character_class: STORYTELLER
+        storyteller_main_menu_army: STORYTELLER
     allowed_for_unregistered_users:
         - storyteller_create_char_start
         - storyteller_create_char_gender
