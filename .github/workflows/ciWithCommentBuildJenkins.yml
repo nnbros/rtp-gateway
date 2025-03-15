@@ -49,15 +49,7 @@ jobs:
           user: "github"
           token: ${{ secrets.GITTOKENJENKINS }}
           job: "rtp-bot-build-on-git-comment"
-          parameters: NODE_ID=${{ github.event.comment.node_id }},PR_NUMBER=${{ github.event.issue.number }},GITHUB_TOKEN=${{ secrets.GIT_TOKEN }},REF=${{ steps.getRef.outputs.pr_ref }}
-
-          
-          
-      - name: Checkout source code from Github
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ steps.getRef.outputs.pr_ref }}      
+          parameters: NODE_ID=${{ github.event.comment.node_id }},PR_NUMBER=${{ github.event.issue.number }},GITHUB_TOKEN=${{ secrets.GIT_TOKEN }},REF=${{ steps.getRef.outputs.pr_ref }},GIT_REPO=${{ github.repository }}
  
   notify-job:
     needs: build
