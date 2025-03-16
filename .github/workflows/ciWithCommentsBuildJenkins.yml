@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: A Jenkins job that only runs on a specific PR comment
-    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/builddiff' }}
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/build' }}
     runs-on: ubuntu-latest
     steps:
       - name: Put a reaction to the comment
