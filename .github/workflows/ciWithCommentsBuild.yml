@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: A long job that only runs on a specific PR comment
-    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/build' }}
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/buildgit' }}
     runs-on: ubuntu-latest
     steps:
       - name: Put a reaction to the comment
