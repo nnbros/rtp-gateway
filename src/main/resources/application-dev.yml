@@ -35,6 +35,8 @@ spring:
                 config:
                     storyteller:
                         url: http://localhost:8085
+                    pve:
+                        url: http://localhost:8090
 gateway:
     rtp-bot:
         webhook-enabled: false

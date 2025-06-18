@@ -1,4 +1,4 @@
-package com.github.nnbros.rtp.gateway.bot.update;
+package com.github.nnbros.rtp.gateway.bot.action;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

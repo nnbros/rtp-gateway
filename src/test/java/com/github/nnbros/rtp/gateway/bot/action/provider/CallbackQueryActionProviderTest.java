@@ -1,6 +1,6 @@
-package com.github.nnbros.rtp.gateway.bot.update.provider;
+package com.github.nnbros.rtp.gateway.bot.action.provider;
 
-import com.github.nnbros.rtp.gateway.bot.update.Action;
+import com.github.nnbros.rtp.gateway.bot.action.Action;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -13,10 +13,10 @@ import java.util.stream.Stream;
 
 import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.TEST_USER_ID;
 import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.createTestCallbackQueryUpdate;
-import static com.github.nnbros.rtp.gateway.bot.update.provider.CallbackQueryActionProvider.STORYTELLER_CREATE_CHAR_CANCEL;
-import static com.github.nnbros.rtp.gateway.bot.update.provider.CallbackQueryActionProvider.STORYTELLER_CREATE_CHAR_START;
-import static com.github.nnbros.rtp.gateway.bot.update.provider.MessageActionProvider.STORYTELLER_CREATE_CHAR_GENDER;
-import static com.github.nnbros.rtp.gateway.bot.update.provider.MessageActionProvider.STORYTELLER_CREATE_CHAR_NAME;
+import static com.github.nnbros.rtp.gateway.bot.action.provider.CallbackQueryActionProvider.STORYTELLER_CREATE_CHAR_CANCEL;
+import static com.github.nnbros.rtp.gateway.bot.action.provider.CallbackQueryActionProvider.STORYTELLER_CREATE_CHAR_START;
+import static com.github.nnbros.rtp.gateway.bot.action.provider.MessageActionProvider.STORYTELLER_CREATE_CHAR_GENDER;
+import static com.github.nnbros.rtp.gateway.bot.action.provider.MessageActionProvider.STORYTELLER_CREATE_CHAR_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)

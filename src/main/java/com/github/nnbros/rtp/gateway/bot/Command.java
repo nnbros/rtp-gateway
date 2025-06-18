@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
-import static com.github.nnbros.rtp.gateway.bot.update.provider.CallbackQueryActionProvider.STORYTELLER_CREATE_CHAR_START;
+import static com.github.nnbros.rtp.gateway.bot.action.provider.CallbackQueryActionProvider.STORYTELLER_CREATE_CHAR_START;
 
 
 @Getter

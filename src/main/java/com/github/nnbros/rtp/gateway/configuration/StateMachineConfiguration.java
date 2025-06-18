@@ -2,9 +2,9 @@ package com.github.nnbros.rtp.gateway.configuration;
 
 import com.github.nnbros.rtp.gateway.bot.statemachine.ErrorAction;
 import com.github.nnbros.rtp.gateway.bot.statemachine.RegistrationAction;
-import com.github.nnbros.rtp.gateway.bot.update.ActionRouter;
-import com.github.nnbros.rtp.gateway.bot.update.LockService;
-import com.github.nnbros.rtp.gateway.bot.update.processor.GatewayTelegramClient;
+import com.github.nnbros.rtp.gateway.bot.action.ActionRouter;
+import com.github.nnbros.rtp.gateway.bot.action.LockService;
+import com.github.nnbros.rtp.gateway.bot.action.processor.GatewayTelegramClient;
 import com.github.nnbros.rtp.gateway.model.Events;
 import com.github.nnbros.rtp.gateway.model.States;
 import lombok.RequiredArgsConstructor;
@@ -62,17 +62,20 @@ public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter
 		configureTransition(transitions, START_REGISTRATION, REGISTRATION_IN_PROGRESS, storyteller_create_char_gender);
 		configureTransition(transitions, REGISTRATION_IN_PROGRESS, REGISTRATION_IN_PROGRESS,
 				List.of(storyteller_create_char_start, storyteller_create_char_gender, storyteller_create_char_name, storyteller_create_char_class_selection, storyteller_create_char_class_confirmation));
-		configureTransition(transitions, REGISTRATION_IN_PROGRESS, REGISTRATION_COMPLETED, storyteller_create_char_registration);
-		configureTransition(transitions, REGISTRATION_COMPLETED, REGISTRATION_COMPLETED,
+		configureTransition(transitions, REGISTRATION_IN_PROGRESS, IDLE, storyteller_create_char_registration);
+		configureTransition(transitions, IDLE, IDLE,
 				List.of(storyteller_main_menu,
-						storyteller_main_menu_monster_hunt,
 						storyteller_main_menu_character,
 						storyteller_main_menu_character_details,
 						storyteller_main_menu_character_deck_builder,
 						storyteller_main_menu_character_class,
-                        storyteller_main_menu_army
+						storyteller_main_menu_army
 				));
+		configureTransition(transitions, IDLE, PVE_BATTLE_IN_PROGRESS, pve_main_menu_monster_hunt);
+		configureTransition(transitions, PVE_BATTLE_IN_PROGRESS, PVE_BATTLE_IN_PROGRESS, pve_battle_turn);
+		configureTransition(transitions, PVE_BATTLE_IN_PROGRESS, IDLE, storyteller_main_menu);
 		//todo break the statemachine status here
+		//todo move state machine config to UML
 	}
 
 	private void configureTransition(StateMachineTransitionConfigurer<States, Events> transitions,

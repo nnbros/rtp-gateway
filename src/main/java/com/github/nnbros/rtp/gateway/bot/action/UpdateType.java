@@ -1,4 +1,4 @@
-package com.github.nnbros.rtp.gateway.bot.update;
+package com.github.nnbros.rtp.gateway.bot.action;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 

@@ -1,7 +1,7 @@
-package com.github.nnbros.rtp.gateway.bot.update.provider;
+package com.github.nnbros.rtp.gateway.bot.action.provider;
 
 import com.github.nnbros.rtp.gateway.bot.Command;
-import com.github.nnbros.rtp.gateway.bot.update.Action;
+import com.github.nnbros.rtp.gateway.bot.action.Action;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

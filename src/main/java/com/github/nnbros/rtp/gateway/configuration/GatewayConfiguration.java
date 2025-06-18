@@ -1,12 +1,12 @@
 package com.github.nnbros.rtp.gateway.configuration;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
-import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
-import com.github.nnbros.rtp.gateway.bot.update.processor.ActionProcessor;
-import com.github.nnbros.rtp.gateway.bot.update.provider.ActionProvider;
-import com.github.nnbros.rtp.gateway.bot.update.provider.CallbackQueryActionProvider;
-import com.github.nnbros.rtp.gateway.bot.update.provider.CommandActionProvider;
-import com.github.nnbros.rtp.gateway.bot.update.provider.MessageActionProvider;
+import com.github.nnbros.rtp.gateway.bot.action.UpdateType;
+import com.github.nnbros.rtp.gateway.bot.action.processor.ActionProcessor;
+import com.github.nnbros.rtp.gateway.bot.action.provider.ActionProvider;
+import com.github.nnbros.rtp.gateway.bot.action.provider.CallbackQueryActionProvider;
+import com.github.nnbros.rtp.gateway.bot.action.provider.CommandActionProvider;
+import com.github.nnbros.rtp.gateway.bot.action.provider.MessageActionProvider;
 import com.github.nnbros.rtp.gateway.model.ActionProcessorType;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.nnbros.rtp.gateway.bot.update.UpdateType.*;
+import static com.github.nnbros.rtp.gateway.bot.action.UpdateType.*;
 
 @Configuration
 @EnableScheduling

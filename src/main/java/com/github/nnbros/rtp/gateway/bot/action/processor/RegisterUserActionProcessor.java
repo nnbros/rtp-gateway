@@ -1,8 +1,8 @@
-package com.github.nnbros.rtp.gateway.bot.update.processor;
+package com.github.nnbros.rtp.gateway.bot.action.processor;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
-import com.github.nnbros.rtp.gateway.bot.update.Action;
-import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
+import com.github.nnbros.rtp.gateway.bot.action.Action;
+import com.github.nnbros.rtp.gateway.bot.action.UpdateType;
 import com.github.nnbros.rtp.gateway.model.ActionProcessorType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

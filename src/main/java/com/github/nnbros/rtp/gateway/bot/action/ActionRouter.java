@@ -1,6 +1,6 @@
-package com.github.nnbros.rtp.gateway.bot.update;
+package com.github.nnbros.rtp.gateway.bot.action;
 
-import com.github.nnbros.rtp.gateway.bot.update.processor.ActionProcessor;
+import com.github.nnbros.rtp.gateway.bot.action.processor.ActionProcessor;
 import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
 import com.github.nnbros.rtp.gateway.util.ActionError;
 import lombok.RequiredArgsConstructor;

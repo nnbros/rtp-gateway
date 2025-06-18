@@ -1,7 +1,7 @@
-package com.github.nnbros.rtp.gateway.bot.update.provider;
+package com.github.nnbros.rtp.gateway.bot.action.provider;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
-import com.github.nnbros.rtp.gateway.bot.update.Action;
+import com.github.nnbros.rtp.gateway.bot.action.Action;
 import com.github.nnbros.rtp.gateway.exception.UnknownMessageException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,9 +18,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.*;
-import static com.github.nnbros.rtp.gateway.bot.update.provider.CallbackQueryActionProvider.STORYTELLER_CREATE_CHAR_START;
-import static com.github.nnbros.rtp.gateway.bot.update.provider.MessageActionProvider.STORYTELLER_CREATE_CHAR_GENDER;
-import static com.github.nnbros.rtp.gateway.bot.update.provider.MessageActionProvider.STORYTELLER_CREATE_CHAR_NAME;
+import static com.github.nnbros.rtp.gateway.bot.action.provider.CallbackQueryActionProvider.STORYTELLER_CREATE_CHAR_START;
+import static com.github.nnbros.rtp.gateway.bot.action.provider.MessageActionProvider.STORYTELLER_CREATE_CHAR_GENDER;
+import static com.github.nnbros.rtp.gateway.bot.action.provider.MessageActionProvider.STORYTELLER_CREATE_CHAR_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

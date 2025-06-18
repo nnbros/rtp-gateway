@@ -1,6 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot;
 
-import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
+import com.github.nnbros.rtp.gateway.bot.action.UpdateType;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.stream.Stream;
 
 import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.*;
-import static com.github.nnbros.rtp.gateway.bot.update.UpdateType.*;
+import static com.github.nnbros.rtp.gateway.bot.action.UpdateType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UpdateTypeTest {
