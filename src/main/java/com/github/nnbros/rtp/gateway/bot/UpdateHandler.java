@@ -1,10 +1,10 @@
 package com.github.nnbros.rtp.gateway.bot;
 
-import com.github.nnbros.rtp.gateway.bot.update.Action;
-import com.github.nnbros.rtp.gateway.bot.update.LockService;
-import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
-import com.github.nnbros.rtp.gateway.bot.update.processor.GatewayTelegramClient;
-import com.github.nnbros.rtp.gateway.bot.update.provider.ActionProvider;
+import com.github.nnbros.rtp.gateway.bot.action.Action;
+import com.github.nnbros.rtp.gateway.bot.action.LockService;
+import com.github.nnbros.rtp.gateway.bot.action.UpdateType;
+import com.github.nnbros.rtp.gateway.bot.action.processor.GatewayTelegramClient;
+import com.github.nnbros.rtp.gateway.bot.action.provider.ActionProvider;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import com.github.nnbros.rtp.gateway.exception.UnknownMessageException;
 import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;

@@ -1,8 +1,8 @@
-package com.github.nnbros.rtp.gateway.bot.update;
+package com.github.nnbros.rtp.gateway.bot.action;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
-import com.github.nnbros.rtp.gateway.bot.update.processor.ActionProcessor;
-import com.github.nnbros.rtp.gateway.bot.update.processor.UserActionUpdateProcessor;
+import com.github.nnbros.rtp.gateway.bot.action.processor.ActionProcessor;
+import com.github.nnbros.rtp.gateway.bot.action.processor.UserActionUpdateProcessor;
 import com.github.nnbros.rtp.gateway.configuration.Actions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

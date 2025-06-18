@@ -1,7 +1,7 @@
-package com.github.nnbros.rtp.gateway.bot.update.processor;
+package com.github.nnbros.rtp.gateway.bot.action.processor;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
-import com.github.nnbros.rtp.gateway.bot.update.Action;
+import com.github.nnbros.rtp.gateway.bot.action.Action;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;

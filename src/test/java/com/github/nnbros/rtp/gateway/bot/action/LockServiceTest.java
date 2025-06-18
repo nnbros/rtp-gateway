@@ -1,4 +1,4 @@
-package com.github.nnbros.rtp.gateway.bot.update;
+package com.github.nnbros.rtp.gateway.bot.action;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

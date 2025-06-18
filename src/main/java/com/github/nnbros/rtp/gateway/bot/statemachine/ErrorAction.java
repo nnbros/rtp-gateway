@@ -1,7 +1,7 @@
 package com.github.nnbros.rtp.gateway.bot.statemachine;
 
-import com.github.nnbros.rtp.gateway.bot.update.LockService;
-import com.github.nnbros.rtp.gateway.bot.update.processor.GatewayTelegramClient;
+import com.github.nnbros.rtp.gateway.bot.action.LockService;
+import com.github.nnbros.rtp.gateway.bot.action.processor.GatewayTelegramClient;
 import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
 import com.github.nnbros.rtp.gateway.model.Events;
 import com.github.nnbros.rtp.gateway.model.States;
@@ -26,7 +26,7 @@ public class ErrorAction implements Action<States, Events> {
 	@Override
 	public void execute(StateContext<States, Events> context) {
 		ExtendedState extendedState = context.getExtendedState();
-		var action = extendedState.get(ACTION, com.github.nnbros.rtp.gateway.bot.update.Action.class);
+		var action = extendedState.get(ACTION, com.github.nnbros.rtp.gateway.bot.action.Action.class);
 		Long userId = action.getUserId();
 		Exception exception = context.getException();
 		String errorText = getErrorText(exception);

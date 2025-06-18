@@ -1,6 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot.controller;
 
-import com.github.nnbros.rtp.gateway.bot.update.LockService;
+import com.github.nnbros.rtp.gateway.bot.action.LockService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;

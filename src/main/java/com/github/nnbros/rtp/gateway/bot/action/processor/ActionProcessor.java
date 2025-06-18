@@ -1,6 +1,6 @@
-package com.github.nnbros.rtp.gateway.bot.update.processor;
+package com.github.nnbros.rtp.gateway.bot.action.processor;
 
-import com.github.nnbros.rtp.gateway.bot.update.Action;
+import com.github.nnbros.rtp.gateway.bot.action.Action;
 import com.github.nnbros.rtp.gateway.model.ActionProcessorType;
 import org.jetbrains.annotations.NotNull;
 

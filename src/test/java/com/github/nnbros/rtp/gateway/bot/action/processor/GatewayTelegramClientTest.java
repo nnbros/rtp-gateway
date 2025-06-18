@@ -1,4 +1,4 @@
-package com.github.nnbros.rtp.gateway.bot.update.processor;
+package com.github.nnbros.rtp.gateway.bot.action.processor;
 
 import com.github.nnbros.rtp.gateway.bot.MessageBuilder;
 import org.junit.jupiter.api.Test;

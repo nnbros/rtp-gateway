@@ -1,12 +1,12 @@
 package com.github.nnbros.rtp.gateway.util;
 
-import com.github.nnbros.rtp.gateway.bot.update.UpdateType;
+import com.github.nnbros.rtp.gateway.bot.action.UpdateType;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
-import static com.github.nnbros.rtp.gateway.bot.update.UpdateType.*;
+import static com.github.nnbros.rtp.gateway.bot.action.UpdateType.*;
 
 public class BotUtils {
 

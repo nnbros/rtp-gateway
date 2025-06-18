@@ -1,6 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot.statemachine;
 
-import com.github.nnbros.rtp.gateway.bot.update.ActionRouter;
+import com.github.nnbros.rtp.gateway.bot.action.ActionRouter;
 import com.github.nnbros.rtp.gateway.model.Events;
 import com.github.nnbros.rtp.gateway.model.States;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class RegistrationAction implements Action<States, Events> {
 
 	@Override
 	public void execute(StateContext<States, Events> context) {
-		var action = context.getExtendedState().get(ACTION, com.github.nnbros.rtp.gateway.bot.update.Action.class);
+		var action = context.getExtendedState().get(ACTION, com.github.nnbros.rtp.gateway.bot.action.Action.class);
 		router.route(action);
 	}
 }

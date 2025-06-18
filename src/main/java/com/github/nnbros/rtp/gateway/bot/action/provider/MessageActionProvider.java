@@ -1,7 +1,7 @@
-package com.github.nnbros.rtp.gateway.bot.update.provider;
+package com.github.nnbros.rtp.gateway.bot.action.provider;
 
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
-import com.github.nnbros.rtp.gateway.bot.update.Action;
+import com.github.nnbros.rtp.gateway.bot.action.Action;
 import com.github.nnbros.rtp.gateway.configuration.Messages;
 import com.github.nnbros.rtp.gateway.exception.UnknownMessageException;
 import lombok.RequiredArgsConstructor;
