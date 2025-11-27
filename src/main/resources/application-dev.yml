@@ -37,6 +37,11 @@ spring:
                         url: http://localhost:8085
                     pve:
                         url: http://localhost:8090
+rtp-bot:
+    webhook-enabled: false
 gateway:
-    rtp-bot:
-        webhook-enabled: false
+    user:
+        lock:
+            ttl: PT1M
+        unregistered:
+            ttl: PT10M

@@ -1,4 +1,4 @@
-package com.github.nnbros.rtp.gateway.util;
+package com.github.nnbros.rtp.gateway.bot.action;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

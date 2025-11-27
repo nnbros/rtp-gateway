@@ -1,15 +1,16 @@
+rtp-bot:
+    webhook-enabled: true
+    url: https://test.com:1234
+    ip: 127.0.0.1
+    webhook-path: testPath
+    token: testToken
+telegram.elements.enabled: false
 gateway:
     api:
         base-url: "/api/v1"
         users-endpoint-prefix: "/users"
-    rtp-bot:
-        webhook-enabled: true
-        url: https://test.com:1234
-        ip: 127.0.0.1
-        webhook-path: testPath
-        token: testToken
     certificate-name: test.crt
-    certificate-path: /certificates/${gateway.certificate-name}
+    certificate-path: classpath:/certificates/${gateway.certificate-name}
     user:
         lock:
             ttl: PT1M

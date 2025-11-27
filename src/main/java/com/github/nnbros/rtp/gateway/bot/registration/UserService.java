@@ -2,7 +2,7 @@ package com.github.nnbros.rtp.gateway.bot.registration;
 
 import com.github.nnbros.rtp.gateway.model.User;
 import com.github.nnbros.rtp.gateway.repository.UserRepository;
-import com.github.nnbros.rtp.gateway.util.ActionError;
+import com.github.nnbros.rtp.gateway.bot.action.ActionError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

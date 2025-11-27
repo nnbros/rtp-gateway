@@ -16,7 +16,7 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.TEST_USER_ID;
+import static com.github.nnbros.rtp.gateway.BotTestUtils.TEST_USER_ID;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {

@@ -1,7 +1,7 @@
 package com.github.nnbros.rtp.gateway.configuration;
 
+import com.github.nnbros.rtp.common.telegram.UpdateType;
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
-import com.github.nnbros.rtp.gateway.bot.action.UpdateType;
 import com.github.nnbros.rtp.gateway.bot.action.processor.ActionProcessor;
 import com.github.nnbros.rtp.gateway.bot.action.provider.ActionProvider;
 import com.github.nnbros.rtp.gateway.bot.action.provider.CallbackQueryActionProvider;
@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.nnbros.rtp.gateway.bot.action.UpdateType.*;
+import static com.github.nnbros.rtp.common.telegram.UpdateType.*;
 
 @Configuration
 @EnableScheduling

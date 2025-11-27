@@ -1,5 +1,6 @@
 package com.github.nnbros.rtp.gateway.configuration;
 
+import com.github.nnbros.rtp.common.autoconfigure.RtpBotProperties;
 import com.github.nnbros.rtp.gateway.bot.UpdateHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -12,7 +13,8 @@ import org.telegram.telegrambots.webhook.starter.SpringTelegramWebhookBot;
 @Configuration
 @RequiredArgsConstructor
 public class BotConfiguration {
-	private final GatewayProperties properties;
+	private final GatewayProperties gatewayProperties;
+	private final RtpBotProperties rtpBotProperties;
 	private static final Runnable WEBHOOK_RUNNABLE_STUB = () -> {
 	};
 
@@ -24,23 +26,23 @@ public class BotConfiguration {
 				.setWebhook(webhookSetter)
 				.deleteWebhook(webhookRemover)
 				.updateHandler(updateHandler)
-				.botPath(properties.getRtpBot().getWebhookPath())
+				.botPath(rtpBotProperties.getWebhookPath())
 				.build();
 	}
 
 	@Bean
 	public TelegramClient telegramClient() {
-		return new OkHttpTelegramClient(properties.getRtpBot().getToken());
+		return new OkHttpTelegramClient(rtpBotProperties.getToken());
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "gateway.rtp-bot.webhook-enabled", havingValue = "false")
+	@ConditionalOnProperty(name = "rtp-bot.webhook-enabled", havingValue = "false")
 	public Runnable webhookSetter() {
 		return WEBHOOK_RUNNABLE_STUB;
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "gateway.rtp-bot.webhook-enabled", havingValue = "false")
+	@ConditionalOnProperty(name = "rtp-bot.webhook-enabled", havingValue = "false")
 	public Runnable webhookRemover() {
 		return WEBHOOK_RUNNABLE_STUB;
 	}

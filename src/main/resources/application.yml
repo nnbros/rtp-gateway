@@ -69,20 +69,26 @@ logging:
         console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr([%t]){faint} %clr(%-40.40logger{39}){cyan} : %X{chatId} %X{updateId} %m%n%wEx"
 
 #####
+# Main bot settings
+#####
+rtp-bot:
+    webhook-enabled: true
+    url: https://rtp-bot.ru:8443/dev
+    ip: 93.120.241.248
+    webhook-path: rtp
+    token: ${RTP_BOT_TOKEN}
+
+telegram.elements.enabled: false
+
+#####
 # Main Gateway settings
 #####
 gateway:
     api:
         base-url: "/api/v1"
         users-endpoint-prefix: "/users"
-    rtp-bot:
-        webhook-enabled: true
-        url: https://rtp-bot.ru:8443/dev
-        ip: 93.120.241.248
-        webhook-path: rtp
-        token: ${RTP_BOT_TOKEN}
     certificate-name: rtpbot-chain.crt
-    certificate-path: /certificates/${gateway.certificate-name}
+    certificate-path: classpath:certificates/${gateway.certificate-name}
     user:
         lock:
             ttl: PT1M

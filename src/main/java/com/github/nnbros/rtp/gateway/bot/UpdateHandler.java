@@ -1,8 +1,8 @@
 package com.github.nnbros.rtp.gateway.bot;
 
+import com.github.nnbros.rtp.common.telegram.UpdateType;
 import com.github.nnbros.rtp.gateway.bot.action.Action;
 import com.github.nnbros.rtp.gateway.bot.action.LockService;
-import com.github.nnbros.rtp.gateway.bot.action.UpdateType;
 import com.github.nnbros.rtp.gateway.bot.action.processor.GatewayTelegramClient;
 import com.github.nnbros.rtp.gateway.bot.action.provider.ActionProvider;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
@@ -23,9 +23,9 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static com.github.nnbros.rtp.common.util.BotUtils.getUserId;
 import static com.github.nnbros.rtp.gateway.bot.statemachine.ErrorAction.ERROR_PROCESSED_FLAG;
-import static com.github.nnbros.rtp.gateway.util.ActionError.ERROR_NOT_ALLOWED;
-import static com.github.nnbros.rtp.gateway.util.BotUtils.getUserId;
+import static com.github.nnbros.rtp.gateway.bot.action.ActionError.ERROR_NOT_ALLOWED;
 
 @Slf4j
 @Service
@@ -89,7 +89,7 @@ public class UpdateHandler implements Function<Update, BotApiMethod<?>> {
 		} catch (Exception e) {
 			lockService.releaseLock(userId);
 			//TODO add retry logic and updates validation
-			throw new GatewayRuntimeException("Failed to process update %s".formatted(updateId), e);
+			throw new GatewayRuntimeException("Failed to process update %s", updateId, e);
 		} finally {
 			MDC.clear();
 		}

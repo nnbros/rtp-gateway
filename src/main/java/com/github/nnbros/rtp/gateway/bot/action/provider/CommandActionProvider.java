@@ -22,7 +22,7 @@ public class CommandActionProvider implements ActionProvider {
 		Message message = update.hasMessage() ? update.getMessage() : update.getEditedMessage();
 		Objects.requireNonNull(message, "Message cannot be empty");
 		if (!message.isCommand()) {
-			throw new GatewayRuntimeException("Unable to process the update %s. It's not a command".formatted(update.getUpdateId()));
+			throw new GatewayRuntimeException("Unable to process the update %s. It's not a command", update.getUpdateId());
 		}
 
 		Command command = parseCommand(message);

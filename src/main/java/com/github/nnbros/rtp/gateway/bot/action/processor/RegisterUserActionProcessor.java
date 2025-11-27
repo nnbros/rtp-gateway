@@ -1,14 +1,14 @@
 package com.github.nnbros.rtp.gateway.bot.action.processor;
 
+import com.github.nnbros.rtp.common.telegram.UpdateType;
 import com.github.nnbros.rtp.gateway.bot.registration.UserService;
 import com.github.nnbros.rtp.gateway.bot.action.Action;
-import com.github.nnbros.rtp.gateway.bot.action.UpdateType;
 import com.github.nnbros.rtp.gateway.model.ActionProcessorType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.github.nnbros.rtp.gateway.util.BotUtils.getUsername;
+import static com.github.nnbros.rtp.common.util.BotUtils.getUsername;
 
 @Component
 @RequiredArgsConstructor

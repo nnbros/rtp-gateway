@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.stream.Stream;
 
-import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.*;
+import static com.github.nnbros.rtp.gateway.BotTestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

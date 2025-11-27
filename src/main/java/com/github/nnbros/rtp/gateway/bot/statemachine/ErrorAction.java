@@ -12,7 +12,7 @@ import org.springframework.statemachine.ExtendedState;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 
-import static com.github.nnbros.rtp.gateway.util.ActionError.ERROR_HELP;
+import static com.github.nnbros.rtp.gateway.bot.action.ActionError.ERROR_HELP;
 
 @Slf4j
 @Configuration
