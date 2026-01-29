@@ -2,7 +2,7 @@ package com.github.nnbros.rtp.gateway.bot;
 
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
-import com.github.nnbros.rtp.gateway.util.ActionError;
+import com.github.nnbros.rtp.gateway.bot.action.ActionError;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.message.Message;

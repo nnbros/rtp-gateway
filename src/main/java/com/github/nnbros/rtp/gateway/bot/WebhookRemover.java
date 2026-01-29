@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "gateway.rtp-bot.webhook-enabled", havingValue = "true")
+@ConditionalOnProperty(name = "rtp-bot.webhook-enabled", havingValue = "true")
 public class WebhookRemover implements Runnable {
 	private final TelegramClient telegramClient;
 

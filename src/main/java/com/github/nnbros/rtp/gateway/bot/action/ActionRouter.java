@@ -2,7 +2,6 @@ package com.github.nnbros.rtp.gateway.bot.action;
 
 import com.github.nnbros.rtp.gateway.bot.action.processor.ActionProcessor;
 import com.github.nnbros.rtp.gateway.exception.UpdateRuntimeException;
-import com.github.nnbros.rtp.gateway.util.ActionError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

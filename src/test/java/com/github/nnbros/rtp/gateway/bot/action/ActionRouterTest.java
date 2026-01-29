@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.TEST_USER_ID;
+import static com.github.nnbros.rtp.gateway.BotTestUtils.TEST_USER_ID;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

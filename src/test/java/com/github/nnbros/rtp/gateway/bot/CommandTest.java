@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 import java.util.stream.Stream;
 
-import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.createTestCommandMessage;
+import static com.github.nnbros.rtp.gateway.BotTestUtils.createTestCommandMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

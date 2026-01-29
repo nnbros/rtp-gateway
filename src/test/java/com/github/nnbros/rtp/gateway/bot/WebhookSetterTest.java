@@ -1,5 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot;
 
+import com.github.nnbros.rtp.common.autoconfigure.RtpBotProperties;
 import com.github.nnbros.rtp.gateway.configuration.GatewayProperties;
 import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +9,7 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.ResourceLoader;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -24,13 +26,17 @@ public class WebhookSetterTest {
 	private TelegramClient telegramClient;
 
 	@Autowired
+	private ResourceLoader resourceLoader;
+	@Autowired
 	private GatewayProperties properties;
+	@Autowired
+	private RtpBotProperties rtpBotProperties;
 
 	private WebhookSetter webhookSetter;
 
 	@BeforeEach
 	void setUp() {
-		webhookSetter = new WebhookSetter(telegramClient, properties);
+		webhookSetter = new WebhookSetter(telegramClient, properties, rtpBotProperties, resourceLoader);
 		clearInvocations(telegramClient);
 	}
 

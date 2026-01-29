@@ -1,7 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot.action.processor;
 
-import com.github.nnbros.rtp.gateway.bot.MessageBuilder;
-import com.github.nnbros.rtp.gateway.exception.GatewayRuntimeException;
+import com.github.nnbros.rtp.common.telegram.MessageBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

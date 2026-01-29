@@ -11,8 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.stream.Stream;
 
-import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.TEST_USER_ID;
-import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.createTestCallbackQueryUpdate;
+import static com.github.nnbros.rtp.gateway.BotTestUtils.TEST_USER_ID;
+import static com.github.nnbros.rtp.gateway.BotTestUtils.createTestCallbackQueryUpdate;
 import static com.github.nnbros.rtp.gateway.bot.action.provider.CallbackQueryActionProvider.STORYTELLER_CREATE_CHAR_CANCEL;
 import static com.github.nnbros.rtp.gateway.bot.action.provider.CallbackQueryActionProvider.STORYTELLER_CREATE_CHAR_START;
 import static com.github.nnbros.rtp.gateway.bot.action.provider.MessageActionProvider.STORYTELLER_CREATE_CHAR_GENDER;

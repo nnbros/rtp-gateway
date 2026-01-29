@@ -1,5 +1,6 @@
-package com.github.nnbros.rtp.gateway.bot;
+package com.github.nnbros.rtp.gateway;
 
+import com.github.nnbros.rtp.gateway.bot.Command;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;

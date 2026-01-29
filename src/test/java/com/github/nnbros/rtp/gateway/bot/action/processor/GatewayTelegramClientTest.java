@@ -1,6 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot.action.processor;
 
-import com.github.nnbros.rtp.gateway.bot.MessageBuilder;
+import com.github.nnbros.rtp.common.telegram.MessageBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.TEST_USER_ID;
+import static com.github.nnbros.rtp.gateway.BotTestUtils.TEST_USER_ID;
 
 @ExtendWith(MockitoExtension.class)
 class GatewayTelegramClientTest {

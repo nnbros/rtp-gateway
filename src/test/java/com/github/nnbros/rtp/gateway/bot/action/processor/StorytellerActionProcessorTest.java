@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.TEST_USER_ID;
+import static com.github.nnbros.rtp.gateway.BotTestUtils.TEST_USER_ID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 

@@ -3,7 +3,7 @@ package com.github.nnbros.rtp.gateway.exception;
 import lombok.Getter;
 
 @Getter
-public class UpdateRuntimeException extends RuntimeException {
+public class UpdateRuntimeException extends GatewayRuntimeException {
 	private Long userId;
 	private String callbackQueryId;
 

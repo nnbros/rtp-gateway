@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.github.nnbros.rtp.gateway.bot.BotTestUtils.TEST_USER_ID;
+import static com.github.nnbros.rtp.gateway.BotTestUtils.TEST_USER_ID;
 
 @ExtendWith(MockitoExtension.class)
 class UserManagementControllerTest {
