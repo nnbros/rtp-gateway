@@ -1,6 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot.action.processor;
 
-import com.github.nnbros.rtp.gateway.bot.MessageBuilder;
+import com.github.nnbros.rtp.common.telegram.MessageBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;

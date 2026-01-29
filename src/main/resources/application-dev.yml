@@ -25,9 +25,9 @@ spring:
             maxLifetime: 300000  # 5 min
             keepaliveTime: 30000  # 30 sec
             connectionTimeout: 30000  # 30 sec
-        url: jdbc:postgresql://213.177.120.46:2219/rtp
+        url: jdbc:postgresql://localhost:5432/rtp
         username: gateway
-        password: rtHYqTODIJr6py7ASDnX
+        password: gateway
 
     cloud:
         openfeign:

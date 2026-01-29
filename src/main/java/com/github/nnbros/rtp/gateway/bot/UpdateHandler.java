@@ -1,5 +1,6 @@
 package com.github.nnbros.rtp.gateway.bot;
 
+import com.github.nnbros.rtp.common.telegram.MessageBuilder;
 import com.github.nnbros.rtp.common.telegram.UpdateType;
 import com.github.nnbros.rtp.gateway.bot.action.Action;
 import com.github.nnbros.rtp.gateway.bot.action.LockService;
